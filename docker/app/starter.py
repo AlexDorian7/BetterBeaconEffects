@@ -3,6 +3,7 @@ import subprocess as sp
 import time
 import signal
 from mcrcon import MCRcon
+from shutil import copyfile
 
 exit_timer = 600
 
@@ -13,6 +14,11 @@ def get_people_online():
         resp = mcr.command("/list")
         return int(resp.split(' ')[2])
     return 0
+
+# Wrzucamy server minecraft tam gdzie być musi
+copyfile('/app/eula.txt','/minecraft/eula.txt')
+copyfile('/app/server.properties','/minecraft/server.properties')
+copyfile('/app/server.jar','/minecraft/server.jar')
 
 # Tu odpalamy minecrafta , czekamy pewien czas i rozpoczynamy pętlę crontaba   
 proc = sp.Popen(["java","-Xmx2048M","-Xms2048M","-jar","./server.jar","nogui"])
