@@ -1,1 +1,4 @@
 -e .
+aws-cdk.aws-ecs
+aws-cdk.aws_efs
+aws-cdk.aws_ec2

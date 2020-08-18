@@ -11,3 +11,4 @@ Project will use CDK to create all neccesary components :
 Things to check before : 
 - How to expose Minecraft ports
 - How to tie domain to minecraft
+
