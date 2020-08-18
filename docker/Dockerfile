@@ -1,4 +1,4 @@
-FROM openjdk:7
+FROM openjdk:16
 RUN yum install -y python3 wget
 COPY app/ /app
 WORKDIR /app

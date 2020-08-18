@@ -18,7 +18,7 @@ def get_people_online():
 # Tu odpalamy minecrafta , czekamy pewien czas i rozpoczynamy pętlę crontaba   
 proc = sp.Popen(["java","-Xmx1024M","-Xms1024M","-jar","./server.jar","nogui"])
 print("Started Minecraft, now waiting for crontab")
-time.sleep(50)
+time.sleep(120)
 while True:
     time.sleep(5)
     people_online = get_people_online()
