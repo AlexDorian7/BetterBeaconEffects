@@ -1,4 +1,4 @@
-#Test3
+#!/usr/bin/env python3
 import subprocess as sp
 import time
 import signal
