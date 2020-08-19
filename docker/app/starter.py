@@ -15,12 +15,12 @@ def get_people_online():
         return int(resp.split(' ')[2])
     return 0
 
-# Wrzucamy server minecraft tam gdzie być musi
+# Copy minecraft server and base configs to proper place in /minecraft foler
 copyfile('/app/eula.txt','/minecraft/eula.txt')
 copyfile('/app/server.properties','/minecraft/server.properties')
 copyfile('/app/server.jar','/minecraft/server.jar')
 
-# Tu odpalamy minecrafta , czekamy pewien czas i rozpoczynamy pętlę crontaba   
+# Starting Minecraft server with 2GB ram, and giving 2 min to finish start , before testing for users 
 proc = sp.Popen(["java","-Xmx2048M","-Xms2048M","-jar","./server.jar","nogui"])
 print("Started Minecraft, now waiting for crontab")
 time.sleep(120)
@@ -37,4 +37,5 @@ while True:
         proc.wait()
         print("Finished App")
         break
-# Tu ewentualnie robimy backup, zanim wyjdziemy z aplikacji
+# This place is run, after minecraft server was stopped
+# Good place to call eventual backup to S3
