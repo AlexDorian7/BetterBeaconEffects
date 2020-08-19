@@ -25,19 +25,25 @@ class CdkStack(core.Stack):
 
         task_definition = ecs.FargateTaskDefinition(self,'TaskDef',
             memory_limit_mib=4096,
-            cpu=1024,
-            volumes = [ecs.Volume(name='mine_data')]
+            cpu=1024
         )
 
         container = task_definition.add_container('MinecraftDocker',
-            image = ecs.ContainerImage.from_registry('itzg/minecraft-server'),
-            environment = {
-                'EULA': 'TRUE'
-            },
+            image = ecs.ContainerImage.from_registry('darevee/minecraft-aws'),
             logging = ecs.AwsLogDriver(stream_prefix='Minecraf'),
             cpu = 1024,
             memory_limit_mib=4096
         )
+        container.add_mount_points(ecs.MountPoint(container_path='/minecraft',source_volume='efs',read_only=False))
+        cfn_task = container.task_definition.node.default_child
+        cfn_task.add_property_override(
+            "Volumes", [{
+                "EFSVolumeConfiguration": {
+                    "FilesystemId": fs.file_system_id
+            },
+            "Name": "efs"
+        }])
+
         container.add_port_mappings(
             ecs.PortMapping(container_port = 25565)
         )
@@ -51,15 +57,12 @@ class CdkStack(core.Stack):
             description='Minecraft Access'
         )
 
-        # CF don't support EFS to Fargate yet.
-        # To make that work I have to play with Custom Resources now
-        # Now that can be quite interesting to do, as I'm using TypeScript example as reference .....
-        
-        # ecsService = ecs.FargateService(self,'Service',
-        #     cluster = cluster,
-        #     task_definition = task_definition,
-        #     assign_public_ip = True,
-        #     security_group = sg
-        # )
+        ecsService = ecs.FargateService(self,'Service',
+            cluster = cluster,
+            task_definition = task_definition,
+            assign_public_ip = True,
+            security_group = sg,
+            platform_version=ecs.FargatePlatformVersion.VERSION1_4
+        )
 
-        # fs.connections.allow_default_port_from(ecsService.Service.connections)
+        fs.connections.allow_default_port_from(sg)

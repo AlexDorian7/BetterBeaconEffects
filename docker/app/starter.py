@@ -23,7 +23,7 @@ copyfile('/app/server.jar','/minecraft/server.jar')
 # Starting Minecraft server with 2GB ram, and giving 2 min to finish start , before testing for users 
 proc = sp.Popen(["java","-Xmx2048M","-Xms2048M","-jar","./server.jar","nogui"])
 print("Started Minecraft, now waiting for crontab")
-time.sleep(120)
+time.sleep(300)
 while True:
     time.sleep(60)
     people_online = get_people_online()
