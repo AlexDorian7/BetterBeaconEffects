@@ -13,7 +13,8 @@ app_envs = {
     'env':core.Environment(
         account=config.get('MAIN','account_id'),
         region=config.get('MAIN','region')
-    )
+    ),
+    'region':config.get('MAIN','region')
 }
 
 
