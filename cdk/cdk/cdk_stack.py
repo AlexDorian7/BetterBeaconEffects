@@ -4,14 +4,20 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_efs as efs,
     aws_lambda as _lambda,
-    aws_iam as iam
+    aws_iam as iam,
+    aws_s3 as  s3,
+    aws_certificatemanager as  acm,
+    aws_route53 as  dns,
+    aws_s3_deployment as s3d,
+    aws_apigateway as api,
+    aws_route53_targets as targets
 
 )
 
 
 class CdkStack(core.Stack):
 
-    def __init__(self, scope: core.Construct, id: str,region, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str,region,domain, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # VPC , we need one for ECS cluster ( sadly )
@@ -64,7 +70,7 @@ class CdkStack(core.Stack):
         subnets =     ",".join(vpc.select_subnets().subnet_ids)  
 
 
-        # Lambda Part 
+        # Lambda Starter 
         starter = _lambda.Function(self,'Starter',
             runtime = _lambda.Runtime.PYTHON_3_8,
             handler = 'index.lambda_handler',
@@ -101,9 +107,75 @@ class CdkStack(core.Stack):
             )
         )
 
+        # S3 static webpage
+        bucket = s3.Bucket(self,"S3WWW",
+            public_read_access=True,
+            removal_policy=core.RemovalPolicy.DESTROY,
+            website_index_document="index.html"
+        )
+        s3d.BucketDeployment(self,"S3Deploy",
+            destination_bucket = bucket,
+            sources = [s3d.Source.asset("static_page")]
+        )
+
+        status = _lambda.Function(self,'Status',
+            runtime = _lambda.Runtime.PYTHON_3_8,
+            handler = 'index.lambda_handler',
+            code = _lambda.Code.asset('lambda/status'),
+            environment={
+                'url' : f"https://minecrafter.{domain}"
+
+
+            }
+        )
+
+
+
+        # Route53
+        zone = dns.HostedZone(self,"dns",
+            zone_name=domain
+        )
+
+        cert = acm.Certificate(
+            self,'cert',
+            domain_name=f'*.{domain}',
+            validation=acm.CertificateValidation.from_dns(zone)
+        )
+
+        # ApiGW 
+        apigw = api.LambdaRestApi(self,'ApiGW',
+            handler = status,
+            proxy=False,
+            domain_name={
+                "domain_name": f'minecrafter.{domain}',
+                "certificate": cert
+            } ,
+                default_cors_preflight_options={
+                    "allow_origins": api.Cors.ALL_ORIGINS,
+                    "allow_methods": api.Cors.ALL_METHODS
+            }
+        )
+
+        start = apigw.root.add_resource('start')
+        start.add_method('ANY',integration=api.LambdaIntegration(starter))
+
+
+        apigw.root.add_method('ANY')
+
+        dns.ARecord(self,'PointDNSToApiGW',
+
+            zone= zone,
+            target=dns.RecordTarget.from_alias(targets.ApiGateway(apigw)),
+            record_name=f"minecrafter.{domain}"
+        )
+
+
+
+
         # To Do Now : 
-        # - Lambda that can launch Task : https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RunTask.html
         # - Nice to have - Said lambda getting IP and setting it as new DNS 
-        # - Route53 zone 
-        # - Route53 Record, pointing to minecraft server
+
         # - ApiGW that shows status of server , and allows to start it . Prefferably Ajax
+        # Functions: 
+        # status : Checks status of server, if it is online, Says : ONLINE, if Offline, says offline
+        # start : starts server. If it works , it should return IP of said server

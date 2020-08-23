@@ -2,3 +2,12 @@
 aws-cdk.aws-ecs
 aws-cdk.aws_efs
 aws-cdk.aws_ec2
+aws-cdk.aws_ecs
+aws-cdk.aws_lambda
+aws-cdk.aws_iam
+aws-cdk.aws_s3
+aws-cdk.aws_certificatemanager
+aws-cdk.aws_route53
+aws-cdk.aws_s3_deployment
+aws-cdk.aws_apigateway
+aws-cdk.aws_route53_targets

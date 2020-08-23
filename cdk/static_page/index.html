@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libx/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+<body>
+    <br>
+    <form id="form">
+        <label id="lbl-name">Name: </label>
+        <input id="name" type="text" name="name">
+        <label id="lbl-age">Age: </label>
+        <input type="text" name="email" id="age">
+
+        <input type="button" name="submit" id="submit" value="Post Data">
+    </form>
+    <label id="lbl">Data from GET</label>:
+    <button id="getdata">Get Data</button>
+</body>
+<script>
+    $('#getdata').click(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "",
+            success: function(data){
+                console.log("Success", data);
+                $('#lbl').html(data["body"])
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+
+    $('#submit').click(function(){
+        var formData = {name: $("#name").val(),
+                        age: $("#age").val()}
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            url: "",
+            success: function(data){
+                console.log("Success",data)
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+</script>
+</html>

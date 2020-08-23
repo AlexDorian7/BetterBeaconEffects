@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+<body>
+    <br>
+    <form id="form">
+        <label id="lbl-name">Name: </label>
+        <input id="name" type="text" name="name">
+        <label id="lbl-age">Age: </label>
+        <input type="text" name="email" id="age">
+
+        <input type="button" name="submit" id="submit" value="Post Data">
+    </form>
+    <label id="lbl">Waiting for data</label>:
+    <button id="getdata">Start Server</button>
+</body>
+<script>
+    $('#getdata').click(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "#url#/?state=get_state",
+            success: function(data){
+                console.log("Success", data);
+                $('#lbl').html(data["message"])
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+
+    $('#submit').click(function(){
+        var formData = {name: $("#name").val(),
+                        age: $("#age").val()}
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            url: "#url#/?state=start_server",
+            success: function(data){
+                console.log("Success",data)
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+
+    setInterval(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "#url#/?state=get_state",
+            success: function(data){
+                console.log("Success", data);
+                $('#lbl').html(data["message"])
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    },10000);
+</script>
+</html>

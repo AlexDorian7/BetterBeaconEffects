@@ -14,7 +14,8 @@ app_envs = {
         account=config.get('MAIN','account_id'),
         region=config.get('MAIN','region')
     ),
-    'region':config.get('MAIN','region')
+    'region':config.get('MAIN','region'),
+    'domain':config.get('MAIN','domain_name')
 }
 
 

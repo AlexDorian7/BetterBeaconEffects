@@ -8,12 +8,7 @@ security_groups = os.environ['security_groups'].split(',')
 task_definition = os.environ['task_definition']
 region = os.environ['region']
 response = {
-            "statusCode": 200,
-            "statusDescription": "200 OK",
-            "isBase64Encoded": False,
-            "headers": {
-                "Content-Type": "application/json; charset=utf-8"
-            }
+            "statusCode": 200
 }
 
 def start_minecraft():
@@ -52,5 +47,6 @@ def lambda_handler(event, context):
     resp = start_minecraft()
 
     response['body'] = f'{{"Status":"{resp}"}}'
+    
     
     return response
