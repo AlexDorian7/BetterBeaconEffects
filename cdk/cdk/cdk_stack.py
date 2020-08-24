@@ -25,6 +25,17 @@ class CdkStack(core.Stack):
 
         cluster = ecs.Cluster(self,'Cluster', vpc= vpc)
 
+        # Route53
+        zone = dns.HostedZone(self,"dns",
+            zone_name=domain
+        )
+
+        cert = acm.Certificate(
+            self,'cert',
+            domain_name=f'*.{domain}',
+            validation=acm.CertificateValidation.from_dns(zone)
+        )
+
         fs = efs.FileSystem(self,'EFS',
             vpc=vpc,
             removal_policy = core.RemovalPolicy.DESTROY
@@ -81,7 +92,8 @@ class CdkStack(core.Stack):
                 'subnets' : subnets, #['subnet-00bbb028597bb7277','subnet-03dca0e092b7fc087','subnet-068ae49f80d2c893e']
                 'security_groups' : sg.security_group_id, #['sg-06940f5bd4a4b2c30']
                 'task_definition' : task_definition.task_definition_arn, #'minecraftTaskDefA418B480:6'
-                'region' : region
+                'region' : region,
+                'zone_id' : zone.hosted_zone_id
             }
         )
 
@@ -89,14 +101,14 @@ class CdkStack(core.Stack):
             iam.PolicyStatement(
                 effect = iam.Effect.ALLOW,
                 resources = ["*"],
-                actions = ["ecs:ListTasks"]
+                actions = ["ecs:ListTasks","ecs:DescribeTasks","ec2:DescribeNetworkInterfaces"]
             )
         )
         starter.add_to_role_policy(
             iam.PolicyStatement(
                 effect = iam.Effect.ALLOW,
                 resources = [task_definition.task_definition_arn],
-                actions = ["ecs:RunTask"]
+                actions = ["ecs:RunTask","ecs:DescribeTasks"]
             )
         )
         starter.add_to_role_policy(
@@ -131,16 +143,7 @@ class CdkStack(core.Stack):
 
 
 
-        # Route53
-        zone = dns.HostedZone(self,"dns",
-            zone_name=domain
-        )
 
-        cert = acm.Certificate(
-            self,'cert',
-            domain_name=f'*.{domain}',
-            validation=acm.CertificateValidation.from_dns(zone)
-        )
 
         # ApiGW 
         apigw = api.LambdaRestApi(self,'ApiGW',

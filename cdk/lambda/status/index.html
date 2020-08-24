@@ -3,6 +3,14 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
 <body>
+    <h1 style="text-align: center;">Mine &amp; Craft</h1>
+    <h3 style="text-align: center;">Small Minecraft Server</h3>
+    <p>Server Status: <span style="color: #ff0000;" id="server_status">Offline</span></p>
+    <p><button id="start">Start Server</button></p>
+    <p>&nbsp;Logs:</p>
+    <p>This is where my logs should appear</p>
+
+
     <br>
     <form id="form">
         <label id="lbl-name">Name: </label>
@@ -16,6 +24,23 @@
     <button id="getdata">Start Server</button>
 </body>
 <script>
+    $('#start').click(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "#url#/?state=start",
+            success: function(data){
+                console.log("Success", data);
+                $('#server_status').html(data["message"])
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+
+
     $('#getdata').click(function(){
         $.ajax({
             type: "GET",

@@ -1,5 +1,8 @@
+
 import boto3
 import os
+import json
+import time
 
 
 cluster = os.environ['cluster'] 
@@ -7,6 +10,7 @@ subnets = os.environ['subnets'].split(',')
 security_groups = os.environ['security_groups'].split(',')
 task_definition = os.environ['task_definition']
 region = os.environ['region']
+zone = os.environ['zone_id']
 response = {
             "statusCode": 200
 }
@@ -38,6 +42,27 @@ def start_minecraft():
             taskDefinition=task_definition
         )
         task_arn = response['tasks'][0]['containers'][0]['taskArn']
+        print(task_arn)
+
+        nislen=0
+        while nislen==0:        
+            response = client.describe_tasks(cluster = cluster,tasks = [task_arn])
+            eni = response['tasks'][0]['attachments'][0]['details']
+            print(eni)
+
+            niis = [id['value'] for id in eni if id['name']=='networkInterfaceId']
+            nislen = len(niis)
+            time.sleep(5)
+            print("waiting for IP")
+            
+        nis = niis[0]
+        
+
+        ec2 = boto3.resource('ec2',region_name=region)
+        network_interface = ec2.NetworkInterface(nis)
+        public_ip = network_interface.association_attribute['PublicIp']
+        print(public_ip)
+        
         return "ok"
     else:
         return "already running"
@@ -46,7 +71,7 @@ def start_minecraft():
 def lambda_handler(event, context):
     resp = start_minecraft()
 
-    response['body'] = f'{{"Status":"{resp}"}}'
+    response['body'] =  json.dumps({'message':resp})    
     
     
     return response
