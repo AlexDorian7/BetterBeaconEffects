@@ -62,6 +62,28 @@ def start_minecraft():
         network_interface = ec2.NetworkInterface(nis)
         public_ip = network_interface.association_attribute['PublicIp']
         print(public_ip)
+        client = boto3.client('route53')
+        response = client.change_resource_record_sets(
+            HostedZoneId=zone,
+            ChangeBatch={
+                'Changes': [
+                    {
+                        'Action': 'UPSERT',
+                        'ResourceRecordSet': {
+                            'Name': 'minecraft',
+                            'Type': 'A',
+
+                            'ResourceRecords': [
+                                {
+                                    'Value': public_ip
+                                },
+                            ],
+                        }
+                    },
+                ]
+            }
+        )
+
         
         return "ok"
     else:

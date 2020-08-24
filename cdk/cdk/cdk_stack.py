@@ -30,6 +30,12 @@ class CdkStack(core.Stack):
             zone_name=domain
         )
 
+        dns.ARecord(self,'MinecraftRecord',
+            zone=zone,
+            record_name='minecraft',
+            target=dns.RecordTarget(values=['1.2.3.4'])
+        )
+
         cert = acm.Certificate(
             self,'cert',
             domain_name=f'*.{domain}',
