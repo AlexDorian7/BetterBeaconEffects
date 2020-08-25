@@ -8,3 +8,4 @@ RUN mkdir /minecraft
 WORKDIR /minecraft
 CMD ["python3","/app/starter.py"]
 EXPOSE 25565/tcp
+EXPOSE 25575/tcp

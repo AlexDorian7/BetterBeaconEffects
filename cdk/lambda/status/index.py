@@ -4,6 +4,7 @@ import os
 import time
 
 url = os.environ['url']
+domain = os.environ['domain']
 
 def lambda_handler(event, context):
     
@@ -22,6 +23,7 @@ def lambda_handler(event, context):
         idx = reader.read()
 
     src = idx.replace("#url#",url)
+    src = src.replace("#domain#",domain)
 
     return {
         "statusCode": 200,

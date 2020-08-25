@@ -105,7 +105,7 @@ def start_minecraft():
         )
 
         
-        return "Started"
+        return "Server Started"
     else:
         return "Already Running"
 

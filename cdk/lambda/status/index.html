@@ -5,13 +5,13 @@
 <body>
     <h1 style="text-align: center;">Mine &amp; Craft</h1>
     <h3 style="text-align: center;">Small Minecraft Server</h3>
-    <p>Server Status: <span style="color: #ff0000;" id="server_status">Offline</span></p>
+    <p>Server Status: <span id="server_status">&nbsp;</span></p>
     <p><button id="start">Start Server</button></p>
-    <p>&nbsp;Logs:</p>
-    <p id="logs">This is where my logs should appear</p>
+    <p>Server Address: minecraft.#domain# (default port)</p>
 </body>
 <script>
     $('#start').click(function(){
+        $('#server_status').html("Sent Start Sequence")
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -44,5 +44,23 @@
 
         });
     },10000);
+
+    $(document).ready(function(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "#url#/start",
+            success: function(data){
+                console.log("Success", data);
+                $('#server_status').html(data["message"])
+            },
+            error: function(data){
+                console.log("Error",data)
+            }
+
+        });
+    });
+    
+
 </script>
 </html>

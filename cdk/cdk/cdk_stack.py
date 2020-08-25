@@ -150,7 +150,8 @@ class CdkStack(core.Stack):
             handler = 'index.lambda_handler',
             code = _lambda.Code.asset('lambda/status'),
             environment={
-                'url' : f"https://minecrafter.{domain}"
+                'url' : f"https://minecrafter.{domain}",
+                'domain' : domain
 
 
             }
@@ -189,11 +190,3 @@ class CdkStack(core.Stack):
 
 
 
-
-        # To Do Now : 
-        # - Nice to have - Said lambda getting IP and setting it as new DNS 
-
-        # - ApiGW that shows status of server , and allows to start it . Prefferably Ajax
-        # Functions: 
-        # status : Checks status of server, if it is online, Says : ONLINE, if Offline, says offline
-        # start : starts server. If it works , it should return IP of said server
