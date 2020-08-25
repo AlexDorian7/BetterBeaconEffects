@@ -11,9 +11,29 @@ security_groups = os.environ['security_groups'].split(',')
 task_definition = os.environ['task_definition']
 region = os.environ['region']
 zone = os.environ['zone_id']
+domain = os.environ['domain']
+
 response = {
             "statusCode": 200
 }
+
+
+def get_minecraft_status():
+
+    client = boto3.client('ecs',region_name=region)
+
+    # Check if it is still running : 
+    tasks = client.list_tasks(
+        cluster = cluster,
+        launchType = 'FARGATE'
+    )
+    running_tasks = len(tasks['taskArns'])
+
+    if running_tasks == 0:
+        return "Server Stopped"
+    else:
+        return "Server Started"
+
 
 def start_minecraft():
 
@@ -70,9 +90,9 @@ def start_minecraft():
                     {
                         'Action': 'UPSERT',
                         'ResourceRecordSet': {
-                            'Name': 'minecraft',
+                            'Name': f'minecraft.{domain}',
                             'Type': 'A',
-
+                            'TTL': 60,
                             'ResourceRecords': [
                                 {
                                     'Value': public_ip
@@ -85,13 +105,27 @@ def start_minecraft():
         )
 
         
-        return "ok"
+        return "Started"
     else:
-        return "already running"
+        return "Already Running"
 
 
 def lambda_handler(event, context):
-    resp = start_minecraft()
+
+    query=event.get('queryStringParameters',{'state':'status'})
+    if query is None:
+        query = {'state':'status'}
+    state = query.get('state','status')
+
+    if state == 'status':
+        resp = get_minecraft_status()
+
+    elif state == 'start': 
+        resp = start_minecraft()
+    else:
+        resp = 'That should not happen'
+
+
 
     response['body'] =  json.dumps({'message':resp})    
     

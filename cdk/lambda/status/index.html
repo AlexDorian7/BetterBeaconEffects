@@ -8,27 +8,14 @@
     <p>Server Status: <span style="color: #ff0000;" id="server_status">Offline</span></p>
     <p><button id="start">Start Server</button></p>
     <p>&nbsp;Logs:</p>
-    <p>This is where my logs should appear</p>
-
-
-    <br>
-    <form id="form">
-        <label id="lbl-name">Name: </label>
-        <input id="name" type="text" name="name">
-        <label id="lbl-age">Age: </label>
-        <input type="text" name="email" id="age">
-
-        <input type="button" name="submit" id="submit" value="Post Data">
-    </form>
-    <label id="lbl">Waiting for data</label>:
-    <button id="getdata">Start Server</button>
+    <p id="logs">This is where my logs should appear</p>
 </body>
 <script>
     $('#start').click(function(){
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "#url#/?state=start",
+            url: "#url#/start?state=start",
             success: function(data){
                 console.log("Success", data);
                 $('#server_status').html(data["message"])
@@ -41,48 +28,15 @@
     });
 
 
-    $('#getdata').click(function(){
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "#url#/?state=get_state",
-            success: function(data){
-                console.log("Success", data);
-                $('#lbl').html(data["message"])
-            },
-            error: function(data){
-                console.log("Error",data)
-            }
-
-        });
-    });
-
-    $('#submit').click(function(){
-        var formData = {name: $("#name").val(),
-                        age: $("#age").val()}
-        $.ajax({
-            type: "GET",
-            contentType: "application/json",
-            data: JSON.stringify(formData),
-            url: "#url#/?state=start_server",
-            success: function(data){
-                console.log("Success",data)
-            },
-            error: function(data){
-                console.log("Error",data)
-            }
-
-        });
-    });
 
     setInterval(function(){
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "#url#/?state=get_state",
+            url: "#url#/start",
             success: function(data){
                 console.log("Success", data);
-                $('#lbl').html(data["message"])
+                $('#server_status').html(data["message"])
             },
             error: function(data){
                 console.log("Error",data)

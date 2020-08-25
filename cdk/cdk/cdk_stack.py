@@ -99,7 +99,8 @@ class CdkStack(core.Stack):
                 'security_groups' : sg.security_group_id, #['sg-06940f5bd4a4b2c30']
                 'task_definition' : task_definition.task_definition_arn, #'minecraftTaskDefA418B480:6'
                 'region' : region,
-                'zone_id' : zone.hosted_zone_id
+                'zone_id' : zone.hosted_zone_id,
+                'domain' : domain
             }
         )
 
@@ -122,6 +123,14 @@ class CdkStack(core.Stack):
                 effect = iam.Effect.ALLOW,
                 resources = [task_definition.task_role.role_arn,task_definition.execution_role.role_arn],
                 actions = ["iam:PassRole"]
+            )
+        )
+
+        starter.add_to_role_policy(
+            iam.PolicyStatement(
+                effect = iam.Effect.ALLOW,
+                resources = [zone.hosted_zone_arn],
+                actions = ["route53:ChangeResourceRecordSets"]
             )
         )
 
