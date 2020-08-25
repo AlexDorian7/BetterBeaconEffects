@@ -1,20 +1,16 @@
 ### Fargated Minecraft
-# Project will use CDK to create all neccesary components : 
-- ECS cluster
-- Task Definition
-- EFS to hold data
-- Api Gateway 
-- Lambda starting service
-- Backup job to keep backups of EFS
-# Docker itself is kept in dockehub, contains :
-- Minecraft Server
-- Python script that terminates docker after certain time of inactivity
+Based on AWS Infrastructure Minecraft server.
+It uses Lambda with Api Gateway to start and oversee minecraft session,
+ECS Fargate and EFS  , to run said session
+Docker Image is kept on Dockerhub, and Github is proviging code for it. 
 
-Folder /minecraft contains all data and settings, it should be added as volumen.
-Minecraft port is set to default 25565
+Version 1.0
+- Webpage allows to start service, and informs when Server is Ready
 
-As I want to keept it as simple as possible, server.properties, server.jar and eula is already kept in app folder, 
-and copied to /minecraft folder on start. Python script terminates docker after 10min of 0 users online. 
-Since script can respont do sigterm, one can add backup at end of script . 
+
+Project is using CDK to maintain infrastructure in AWS. 
+
+Docker consist of python scripts that runs minecraf.jar, and checks for people online.
+If server is not used for 10 min, it is shut down. 
 
 
