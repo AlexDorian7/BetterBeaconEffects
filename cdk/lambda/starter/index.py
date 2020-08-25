@@ -3,6 +3,7 @@ import boto3
 import os
 import json
 import time
+from mcrcon import MCRcon
 
 
 cluster = os.environ['cluster'] 
@@ -32,7 +33,35 @@ def get_minecraft_status():
     if running_tasks == 0:
         return "Server Stopped"
     else:
-        return "Server Started"
+
+        task_arn = tasks['taskArns'][0]
+        print(task_arn)
+
+        nislen=0
+        while nislen==0:        
+            response = client.describe_tasks(cluster = cluster,tasks = [task_arn])
+            eni = response['tasks'][0]['attachments'][0]['details']
+            print(eni)
+
+            niis = [id['value'] for id in eni if id['name']=='networkInterfaceId']
+            nislen = len(niis)
+            time.sleep(5)
+            print("waiting for IP")
+            
+        nis = niis[0]
+        
+
+        ec2 = boto3.resource('ec2',region_name=region)
+        network_interface = ec2.NetworkInterface(nis)
+        public_ip = network_interface.association_attribute['PublicIp']
+
+        try:
+            with MCRcon(public_ip, "ebbeh") as mcr:
+                resp = mcr.command("/list")
+                count =  int(resp.split(' ')[2])
+            return f"Sever Ready. {count} people online"
+        except:
+            return "Server Starting"
 
 
 def start_minecraft():

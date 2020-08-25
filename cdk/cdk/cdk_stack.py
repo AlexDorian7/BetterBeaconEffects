@@ -81,6 +81,11 @@ class CdkStack(core.Stack):
             connection=ec2.Port.tcp(25565),
             description='Minecraft Access'
         )
+        sg.add_ingress_rule(
+            peer=ec2.Peer.any_ipv4(),
+            connection=ec2.Port.tcp(25575),
+            description='RCONN Access'
+        )
 
         fs.connections.allow_default_port_from(sg)
 
