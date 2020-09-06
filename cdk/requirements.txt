@@ -3,6 +3,7 @@ aws-cdk.aws-ecs
 aws-cdk.aws_efs
 aws-cdk.aws_ec2
 aws-cdk.aws_ecs
+aws-cdk.aws_cognito
 aws-cdk.aws_lambda
 aws-cdk.aws_iam
 aws-cdk.aws_s3

@@ -10,7 +10,8 @@ from aws_cdk import (
     aws_route53 as  dns,
     aws_s3_deployment as s3d,
     aws_apigateway as api,
-    aws_route53_targets as targets
+    aws_route53_targets as targets,
+    aws_cognito as cognito
 
 )
 
@@ -25,7 +26,7 @@ class CdkStack(core.Stack):
 
         cluster = ecs.Cluster(self,'Cluster', vpc= vpc)
 
-        # Route53
+        # Route53 & SSL Certificate
         zone = dns.HostedZone(self,"dns",
             zone_name=domain
         )
@@ -42,6 +43,7 @@ class CdkStack(core.Stack):
             validation=acm.CertificateValidation.from_dns(zone)
         )
 
+        # ECS ( Cluster, EFS, Task Def)
         fs = efs.FileSystem(self,'EFS',
             vpc=vpc,
             removal_policy = core.RemovalPolicy.DESTROY
@@ -91,7 +93,18 @@ class CdkStack(core.Stack):
 
         subnets =     ",".join(vpc.select_subnets().subnet_ids)  
 
+        # Cognito ( For ApiGW Authentication)
+        userpool = cognito.UserPool(self,'UserPool',
+            user_invitation=cognito.UserInvitationConfig(
+                email_body="""No cześć {username}, zostałeś zaproszony do naszego Minecraft!
+                Twoje tymczasowe hasło to {####}
+                """,
+                email_subject="Zaproszenie do minecrafta"
+                )
+        )
 
+        # APIGW (Gateway, Lambdas, S3 Static content)
+        
         # Lambda Starter 
         starter = _lambda.Function(self,'Starter',
             runtime = _lambda.Runtime.PYTHON_3_8,
@@ -99,10 +112,10 @@ class CdkStack(core.Stack):
             code = _lambda.Code.asset('lambda/starter'),
             timeout=core.Duration.seconds(300),
             environment={
-                'cluster' : cluster.cluster_name, #'minecraft-ClusterEB0386A7-Z0d6m6gZQG45'
-                'subnets' : subnets, #['subnet-00bbb028597bb7277','subnet-03dca0e092b7fc087','subnet-068ae49f80d2c893e']
-                'security_groups' : sg.security_group_id, #['sg-06940f5bd4a4b2c30']
-                'task_definition' : task_definition.task_definition_arn, #'minecraftTaskDefA418B480:6'
+                'cluster' : cluster.cluster_name, 
+                'subnets' : subnets, 
+                'security_groups' : sg.security_group_id, 
+                'task_definition' : task_definition.task_definition_arn, 
                 'region' : region,
                 'zone_id' : zone.hosted_zone_id,
                 'domain' : domain
