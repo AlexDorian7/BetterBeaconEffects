@@ -16,16 +16,17 @@ Here is the list of all blocks that can affect the beacon.
  - Redstone Block - Removes a beam
  - Slime Block - Adds a beam
  - Observer - Adds a texture
- - Sea Lantern - Makes the beacon beam spin (Only in 1.15.2 and 1.16.1)
- - Prismarine - Makes the beam more opaque (Only in 1.15.2 and 1.16.1)
- - Lapis Block - offsets the beam by 1 on the X and Z axis (Only in 1.15.2 and 1.16.1)
- - Coal Block - offsets the beam by -1 on the X and Z axis (Only in 1.15.2 and 1.16.1)
- - End Stone - Magic end effect (Only in 1.15.2 and 1.16.1 | V 1.1) 
+ - Sea Lantern - Makes the beacon beam spin
+ - Prismarine - Makes the beam more opaque
+ - Lapis Block - offsets the beam by 1 on the X and Z axis
+ - Coal Block - offsets the beam by -1 on the X and Z axis
+ - End Stone - Magic end effect 
+ - End Stone Bricks - Background for magic effect
 
 
 
 ## Compatibility & Download
-This mod is currenctly only compatible with Minecraft Forge 1.16.4 (there are older versions, see [Links](#Links))
+This mod is currenctly only compatible with Minecraft Forge 1.16.4 (there are older versions, see [Links](#Links). The older versions may not contain all the features!)
 
 ### Links
 This Github repository contains only the source code of the mod, to download the mod-jar use the links displayed below.

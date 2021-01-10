@@ -50,6 +50,7 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 	private static boolean debug = false;
 	private static boolean selection = false;
 	private static boolean magic = false;
+	private static boolean background = false;
 	private static float alpha = 0.125F;
 	private static int offset = 0;
 	
@@ -73,6 +74,7 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 		debug = false;
 		selection = false;
 		magic = false;
+		background = false;
 		alpha = 0.125F;
 		offset = 0;
 		
@@ -174,6 +176,12 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 							renderSelectionBlock(tileEntityIn, matrixStackIn, bufferIn, BlockColors.END_STONE, x,
 									y, z);
 					}
+					if (checkBlock(tileEntityIn, x, y, z, Blocks.END_STONE_BRICKS)) {
+						background = true;
+						if (selection)
+							renderSelectionBlock(tileEntityIn, matrixStackIn, bufferIn, BlockColors.END_STONE_BRICKS, x,
+									y, z);
+					}
 				}
 			}
 		}
@@ -262,10 +270,12 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 							1.0F + offset, f16 + offset, f15 + offset);
 				}
 			} else {
-				renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(0)), 0F, 0F, 0F, 1.0F, yOffset, i,
-						0.0F + offset, beamRadius + offset, beamRadius + offset, 0.0F + offset, f9 + offset,
-						0.0F + offset, 0.0F + offset, f12 + offset, 0.0F + offset, 1.0F + offset, f16 + offset,
-						f15 + offset);
+				if (background) {
+					renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(0)), 0F, 0F, 0F, 1.0F, yOffset, i,
+							0.0F + offset, beamRadius + offset, beamRadius + offset, 0.0F + offset, f9 + offset,
+							0.0F + offset, 0.0F + offset, f12 + offset, 0.0F + offset, 1.0F + offset, f16 + offset,
+							f15 + offset);
+				}
 				for (int l = 1; l < passes; l++) {
 					renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(l)), f3, f4, f5, 1.0F, yOffset, i,
 							0.0F + offset, beamRadius + offset, beamRadius + offset, 0.0F + offset, f9 + offset,
@@ -304,12 +314,14 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 							1.0F + offset, f16 + offset, f15 + offset);
 				}
 			} else {
-				renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(0)), 0F, 0F, 0F, 1F, yOffset, i,
-						f6 + offset, f7 + offset, glowRadius + offset, f8 + offset, f9 + offset, glowRadius + offset,
-						glowRadius + offset, glowRadius + offset, 0.0F + offset, 1.0F + offset, f16 + offset,
-						f15 + offset);
+				if (background) {
+					renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(0)), 0F, 0F, 0F, 1F, yOffset, i,
+							f6 + offset, f7 + offset, glowRadius + offset, f8 + offset, f9 + offset, glowRadius + offset,
+							glowRadius + offset, glowRadius + offset, 0.0F + offset, 1.0F + offset, f16 + offset,
+							f15 + offset);
+				}
 				for (int l = 1; l < passes; l++) {
-					renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(l)), f3, f4, f5, glowAmount, yOffset,
+					renderPart(matrixStackIn, bufferIn.getBuffer(RENDER_TYPES.get(l)), f3, f4, f5, glowAmount/beamRadius, yOffset,
 							i, f6 + offset, f7 + offset, glowRadius + offset, f8 + offset, f9 + offset,
 							glowRadius + offset, glowRadius + offset, glowRadius + offset, 0.0F + offset, 1.0F + offset,
 							f16 + offset, f15 + offset);
