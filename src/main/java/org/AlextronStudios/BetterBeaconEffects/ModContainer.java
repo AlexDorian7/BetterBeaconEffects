@@ -2,7 +2,12 @@ package org.AlextronStudios.BetterBeaconEffects;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,6 +54,7 @@ public class ModContainer {
     private void doClientStuff(final FMLClientSetupEvent event) {
     	LOGGER.info("OVERRIDING BEACON RENDERER!");
     	ClientRegistry.bindTileEntityRenderer(TileEntityType.BEACON, OldBeaconTileEntityRender::new);
+
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
@@ -67,6 +73,11 @@ public class ModContainer {
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public void onPlayerRender(RenderPlayerEvent.Post event) {
+        event.getRenderer().addLayer(new MagicRenderLayer(event.getRenderer()));
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
