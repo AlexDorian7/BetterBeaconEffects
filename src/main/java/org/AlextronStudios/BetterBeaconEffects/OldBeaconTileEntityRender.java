@@ -227,7 +227,7 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 		int i = yOffset + height;
 		matrixStackIn.push();
 		matrixStackIn.translate(0.5D, 0.0D, 0.5D);
-		float f = (float) Math.floorMod(totalWorldTime, 40L) + partialTicks;
+		float f = (float) Math.floorMod(totalWorldTime, 160L) + partialTicks;
 		float f1 = height < 0 ? f : -f;
 		float f2 = MathHelper.frac(f1 * 0.2F - (float) MathHelper.floor(f1 * 0.1F));
 		float f3 = colors[0];
@@ -277,7 +277,7 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 		matrixStackIn.pop();
 		matrixStackIn.push();
 		if (rotating)
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(f * 2.25F - 45.0F));
+			matrixStackIn.rotate(Vector3f.YP.rotationDegrees((1*f) * 2.25F - 45.0F));
 		if (debug) {
 			matrixStackIn.translate(f3, f4, f5);
 		}
