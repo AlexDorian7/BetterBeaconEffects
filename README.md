@@ -25,7 +25,7 @@ Here is the list of all blocks that can affect the beacon.
 
 
 ## Compatibility & Download
-This mod is currenctly only compatible with Minecraft Forge 1.16.4 (there are older versions, see [Links](Links))
+This mod is currenctly only compatible with Minecraft Forge 1.16.4 (there are older versions, see [Links](#Links))
 
 ### Links
 This Github repository contains only the source code of the mod, to download the mod-jar use the links displayed below.
