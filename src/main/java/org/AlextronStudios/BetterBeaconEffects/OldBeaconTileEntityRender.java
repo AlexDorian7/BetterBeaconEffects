@@ -1,13 +1,8 @@
 package org.AlextronStudios.BetterBeaconEffects;
 
-import java.awt.Color;
-import java.util.List;
-import java.util.stream.IntStream;
-
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -25,6 +20,10 @@ import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.awt.*;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 	
