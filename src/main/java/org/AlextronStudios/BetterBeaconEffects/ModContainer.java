@@ -22,7 +22,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.stream.Collectors;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod("betterbeaconeffects")
 public class ModContainer {
     // Directly reference a log4j logger.

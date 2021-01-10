@@ -80,13 +80,13 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 			selection = true;
 			int yOffset = -3;
 			float glowRadius = 3.5f;
-			float glowAmount = flash((double) i, (double) partialTicks);
+			float glowAmount = flash((double) i, partialTicks);
 			int height = 7;
 			float textureScale = 0.2F;
 			float[] colors = { 1F, 1F, 1F };
 			int i1 = yOffset + height;
 			float f = (float) Math.floorMod(i, 40L) + partialTicks;
-			float f1 = height < 0 ? f : -f;
+			float f1 = -f; //height < 0 ? f : -f;
 			float f2 = MathHelper.frac(f1 * 0.2F - (float) MathHelper.floor(f1 * 0.1F));
 			float f3 = colors[0];
 			float f4 = colors[1];
@@ -182,10 +182,10 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 			BeaconTileEntity.BeamSegment beacontileentity$beamsegment = list.get(k);
 			float[] color = beacontileentity$beamsegment.getColors();
 			if (rainbow) {
-				color = generateRainbow((double) i, (double) partialTicks);
+				color = generateRainbow((double) i, partialTicks);
 			}
 			if (flash) {
-				alpha = flash((double) i, (double) partialTicks);
+				alpha = flash((double) i, partialTicks);
 			}
 			double d0 = tileEntityIn.getPos().distanceSq(this.renderDispatcher.renderInfo.getProjectedView(), true);
 			int l = this.getPasses(d0);
@@ -202,18 +202,17 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
     	int colorEncode = Color.HSBtoRGB((float)d0, 1F, 1F);
     	int i1 = (colorEncode & 16711680) >> 16;
         int j1 = (colorEncode & 65280) >> 8;
-        int k1 = (colorEncode & 255) >> 0;
+        int k1 = (colorEncode & 255);
         return new float[] {(float)i1 / 255.0F, (float)j1 / 255.0F, (float)k1 / 255.0F};
     }
     public static boolean checkBlock(BeaconTileEntity te, int rx, int ry, int rz, Block block) {
     	BlockPos pos = te.getPos().add(rx, ry, rz);
-    	Block blockToCheck = te.getWorld().getBlockState(pos).getBlock();
-    	
-    	if (blockToCheck == block) {
-    		return true;
-    	}
+    	if (te.getWorld() != null) {
+			Block blockToCheck = te.getWorld().getBlockState(pos).getBlock();
+			return blockToCheck == block;
+		}
     	return false;
-    }
+	}
     public static float flash(double time, double partialTicks) {
     	float f = (float) (time + partialTicks);
     	float f1 = (float) (Math.sin((double)f * 0.05D) / 2D + 0.5D);
@@ -371,9 +370,9 @@ public class OldBeaconTileEntityRender extends BeaconTileEntityRenderer {
 		float f = (float) Math.floorMod(totalWorldTime, 160L) + partialTicks;
 		matrixStackIn.push();
 		matrixStackIn.translate(0.5F, 0.125F, 0.5F);
-		float f1 = (float) (totalWorldTime + partialTicks) * 3.0F;
+		float f1 = (totalWorldTime + partialTicks) * 3.0F;
 		float f2 = sinWave(totalWorldTime, partialTicks);
-		matrixStackIn.translate(0.0D, (double) (1.5F + f2 / 2.0F), 0.0D);
+		matrixStackIn.translate(0.0D, 1.5F + f2 / 2.0F, 0.0D);
 		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(f1));
 		matrixStackIn.rotate(new Quaternion(new Vector3f(PiSin, 0.0F, PiSin), 60.0F, true));
 		renderCube(matrixStackIn, bufferIn.getBuffer(RenderType.getEntitySmoothCutout(TEXTURE_OUT)), red, green, blue,

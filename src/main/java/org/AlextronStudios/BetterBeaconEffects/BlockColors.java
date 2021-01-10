@@ -15,8 +15,6 @@ public enum BlockColors {
 	COAL_BLOCK(0F, 0F, 0F, 1F),
 	END_STONE(255F, 255F, 100F, 1F);
 	
-	
-	
 	public float red;
 	public float green;
 	public float blue;
