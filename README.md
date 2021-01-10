@@ -4,7 +4,7 @@
 BetterBeaconEffects is a Minecraft mod with lots of variations of beacon effects.
 
 ## Effects
-Each effect can be applied to a beacon by simply placing a specific [Block](Blocks) nearby. The range is 7x7x7 (centered at the beacon).
+Each effect can be applied to a beacon by simply placing a specific [Block](#Blocks) nearby. The range is 7x7x7 (centered at the beacon).
 
 ### Blocks
 Here is the list of all blocks that can affect the beacon.
