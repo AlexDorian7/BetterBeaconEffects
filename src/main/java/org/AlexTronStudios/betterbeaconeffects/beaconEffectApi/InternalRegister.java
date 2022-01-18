@@ -22,6 +22,11 @@ public class InternalRegister {
         register("add_beam_effect", new AddBeamEffect());
         register("texture_effect", new TextureEffect());
         register("spin_effect", new SpinEffect());
+        register("alpha_effect", new AlphaEffect());
+        register("movep_effect", new MovePEffect());
+        register("moven_effect", new MoveNEffect());
+        register("magic_effect", new MagicEffect());
+        register("laser_effect", new LaserEffect());
 
         registered = true;
     }

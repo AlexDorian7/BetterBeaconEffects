@@ -8,28 +8,26 @@ import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSetti
 
 import java.awt.*;
 
-public class TextureEffect implements BeaconEffect {
+public class MovePEffect implements BeaconEffect {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/beacon_beam.png");
     @Override
     public String getName() {
-        return "Texture Effect";
+        return "MoveP Effect";
     }
 
     @Override
     public Block getBlock() {
-        return Blocks.OBSERVER;
+        return Blocks.LAPIS_BLOCK;
     }
 
     @Override
     public int getColor() {
-        return new Color(127, 127, 127).getRGB();
+        return new Color(0, 0, 255).getRGB();
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        beaconRenderSettings.texture = TEXTURE;
-        beaconRenderSettings.recalculateRenderType();
+        beaconRenderSettings.poseStack.translate(1,0,1);
         return beaconRenderSettings;
     }
 }

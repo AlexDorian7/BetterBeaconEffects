@@ -21,6 +21,11 @@ public class BeaconEffectRegistry {
         return blockRegistry;
     }
 
+    /**
+     * Used to register a new beacon beam effect
+     * @param name The name to register the effect under
+     * @param effect An instance of the effect class to register
+     */
     public static void register(ResourceLocation name, BeaconEffect effect) {
         registry.put(name, effect);
         blockRegistry.add(new Pair(name, effect.getBlock()));

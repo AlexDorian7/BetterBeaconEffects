@@ -8,7 +8,6 @@ Each effect can be applied to a beacon by simply placing a specific [Block](#Blo
 
 ### Blocks
 Here is the list of all blocks that can affect the beacon.
- - Glass - Shows the effect checking area (Must be placed on top of the beacon)
  - Command Block - Debug Offset
  - Purpur Block - Fading effect
  - Quartz Block - Spinning beam
@@ -20,9 +19,13 @@ Here is the list of all blocks that can affect the beacon.
  - Prismarine - Makes the beam more opaque
  - Lapis Block - offsets the beam by 1 on the X and Z axis
  - Coal Block - offsets the beam by -1 on the X and Z axis
- - End Stone - Magic end effect 
- - End Stone Bricks - Background for magic effect
+ - End Stone - Magic end effect
+ - Waxed Copper Block - Rotate the beam 90deg on the x-axis
 
+
+## API
+The 1.18.1 version come with a major rewrite featuring a small API for registering new beam effects.
+See `BeaconEffectRegistry$register` for more info
 
 
 ## Compatibility & Download
