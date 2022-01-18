@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -44,6 +46,12 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
     }
 
     public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color) {
+
+        float f = (float)Math.floorMod(time, 40) + partialTicks;
+        float f1 = height < 0 ? f : -f;
+        float f2 = Mth.frac(f1 * 0.2F - (float)Mth.floor(f1 * 0.1F));
+        float f15 = -1.0F + f2;
+        float f16 = (float)height * 1.0F * (0.5F / 0.3F) + f15;
 
         poseStack.pushPose();
 
@@ -83,7 +91,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
             for (int i=0; i<settings.beams; i++) {
                 float s = i*4+4;
                 float s1 = s/2;
-                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(RenderType.beaconBeam(settings.texture, true)), new Vector3f(8-s1, settings.baseHeight*16, 8-s1), new Vector3f(8+s1, settings.height*16, 8+s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha);
+                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(RenderType.beaconBeam(settings.texture, true)), new Vector3f(8-s1, settings.baseHeight*16, 8-s1), new Vector3f(8+s1, settings.height*16, 8+s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F), 15728880);
             }
         }
 

@@ -43,7 +43,7 @@ public class RenderUtils {
     }
 
     public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a) {
-        renderTube(stackIn, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1);
+        renderTube(stackIn, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1, 15728880);
     }
 
     public static void renderPart(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, int u1, int v1, int u2, int v2) {
@@ -55,11 +55,11 @@ public class RenderUtils {
         renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
     }
 
-    public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, int u1, int v1, int u2, int v2) {
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2);
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
-        renderFace(stackIn, bufferIn, convert(end.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
+    public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, float u1, float v1, float u2, float v2, int uv2) {
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2, uv2);
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
+        renderFace(stackIn, bufferIn, convert(end.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
         //renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2);
         //renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
     }
@@ -107,6 +107,13 @@ public class RenderUtils {
         iVertexBuilder.vertex(matrix4f, endX, startY, p_228884_9_).color(r, g, b, a).uv(u2,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
         iVertexBuilder.vertex(matrix4f, endX, endY, p_228884_10_).color(r, g, b, a).uv(u2,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
         iVertexBuilder.vertex(matrix4f, startX, endY, p_228884_11_).color(r, g, b, a).uv(u1,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
+    }
+
+    public static void renderFace(Matrix4f matrix4f, VertexConsumer iVertexBuilder, float startX, float endX, float startY, float endY, float p_228884_8_, float p_228884_9_, float p_228884_10_, float p_228884_11_, float r, float g, float b, float a, float u1, float v1, float u2, float v2, int uv2) {
+        iVertexBuilder.vertex(matrix4f, startX, startY, p_228884_8_).color(r, g, b, a).uv(u1,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
+        iVertexBuilder.vertex(matrix4f, endX, startY, p_228884_9_).color(r, g, b, a).uv(u2,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
+        iVertexBuilder.vertex(matrix4f, endX, endY, p_228884_10_).color(r, g, b, a).uv(u2,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
+        iVertexBuilder.vertex(matrix4f, startX, endY, p_228884_11_).color(r, g, b, a).uv(u1,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
     }
 
     public static void renderFace(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float r, float g, float b, float a, float u, float v, float u0, float v0, int i, int i1) {
