@@ -41,14 +41,13 @@ public interface BeaconEffect {
 
     /**
      * The custom renderer to be used if hasCustomRender is true
-     * @param blockEntity The Beacon Block Entity being rendered
-     * @param poseStack The PoseStack
-     * @param multiBufferSource The MultiBufferSource
-     * @param partialTicks The partial ticks
-     * @param time The current world time
-     * @param baseHeight The starting height for the beam segment
-     * @param height The height of the beam segment
-     * @param color The color of the beam segment
+     * @param settings The settings object
      */
-    default void customRenderer(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color) {}
+    default void customRenderer(BeaconRenderSettings settings) {}
+
+    /**
+     * This is called once each frame to do additional rendering
+     * @param settings The settings for rendering
+     */
+    default void customRenderStep(BeaconRenderSettings settings) {}
 }

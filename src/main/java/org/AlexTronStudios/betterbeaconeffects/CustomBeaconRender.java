@@ -19,6 +19,7 @@ import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSetti
 import org.AlexTronStudios.betterbeaconeffects.utils.Pair;
 import org.AlexTronStudios.betterbeaconeffects.utils.RenderUtils;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,19 +44,6 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         List<BeaconBlockEntity.BeaconBeamSection> list = blockEntity.getBeamSections();
         int j = 0;
 
-        for(int k = 0; k < list.size(); ++k) {
-            BeaconBlockEntity.BeaconBeamSection beaconblockentity$beaconbeamsection = list.get(k);
-            renderBeaconBeam(blockEntity, poseStack, multiBufferSource, partialTicks, i, j, k == list.size() - 1 ? MAX_RENDER_Y : beaconblockentity$beaconbeamsection.getHeight(), beaconblockentity$beaconbeamsection.getColor());
-            j += beaconblockentity$beaconbeamsection.getHeight();
-        }
-    }
-
-    public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color) {
-
-        poseStack.pushPose();
-
-        poseStack.translate(0.5F,0,0.5F);
-
         List<Pair<ResourceLocation, Block>> blocks = BeaconEffectRegistry.getBlockRegistry();
         List<ResourceLocation> activeEffects = new ArrayList<>();
 
@@ -73,6 +61,28 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
                 }
             }
         }
+        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, i, 0, 0, new float[]{0, 0, 0}, new ResourceLocation(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
+        for (ResourceLocation activeEffect : activeEffects) {
+            BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(activeEffect);
+            if (effect.hasCustomRender()) {
+                renderer = effect;
+            }
+            effect.customRenderStep(settings);
+        }
+
+        for(int k = 0; k < list.size(); ++k) {
+            BeaconBlockEntity.BeaconBeamSection beaconblockentity$beaconbeamsection = list.get(k);
+            renderBeaconBeam(blockEntity, poseStack, multiBufferSource, partialTicks, i, j, k == list.size() - 1 ? MAX_RENDER_Y : beaconblockentity$beaconbeamsection.getHeight(), beaconblockentity$beaconbeamsection.getColor(), activeEffects, renderer);
+            j += beaconblockentity$beaconbeamsection.getHeight();
+        }
+    }
+
+    public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, List<ResourceLocation> activeEffects, @Nullable BeaconEffect renderer) {
+
+        poseStack.pushPose();
+
+        poseStack.translate(0.5F,0,0.5F);
+
         float[] c = {color[0], color[1], color[2]};
         BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, time, baseHeight, height, c, new ResourceLocation(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
 
@@ -85,7 +95,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         }
 
         if (renderer != null) {
-            renderer.customRenderer(settings.blockEntity, settings.poseStack, settings.multiBufferSource, settings.partialTicks, settings.time, settings.baseHeight, settings.height, settings.color);
+            renderer.customRenderer(settings);
         } else {
             for (int i=0; i<settings.beams; i++) {
                 float s = i*4+4;

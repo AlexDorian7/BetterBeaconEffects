@@ -8,6 +8,7 @@ import org.AlexTronStudios.betterbeaconeffects.utils.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class BeaconEffectRegistry {
     private static final Map<ResourceLocation, BeaconEffect> registry = new Object2ObjectArrayMap<>();
@@ -26,8 +27,19 @@ public class BeaconEffectRegistry {
      * @param name The name to register the effect under
      * @param effect An instance of the effect class to register
      */
+    @Deprecated
     public static void register(ResourceLocation name, BeaconEffect effect) {
         registry.put(name, effect);
         blockRegistry.add(new Pair(name, effect.getBlock()));
+    }
+
+    /**
+     * Used to register a new beacon beam effect
+     * @param name The name to register the effect under
+     * @param effect A supplier of the effect class to register
+     */
+    public static void register(ResourceLocation name, Supplier<BeaconEffect> effect) {
+        registry.put(name, effect.get());
+        blockRegistry.add(new Pair(name, effect.get().getBlock()));
     }
 }
