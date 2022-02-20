@@ -29,7 +29,7 @@ See `BeaconEffectRegistry$register` for more info
 
 
 ## Compatibility & Download
-This mod is currenctly only compatible with Minecraft Forge 1.16.4 (there are older versions, see [Links](#Links). The older versions may not contain all the features!)
+This mod is currenctly only compatible with Minecraft Forge 1.18 - 1.18.1 (there are older versions, see [Links](#Links). The older versions may not contain all the features!)
 
 ### Links
 This Github repository contains only the source code of the mod, to download the mod-jar use the links displayed below.
