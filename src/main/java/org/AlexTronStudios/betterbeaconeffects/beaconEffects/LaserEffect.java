@@ -1,11 +1,10 @@
 package org.AlexTronStudios.betterbeaconeffects.beaconEffects;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.joml.Quaternionf;
 
 import java.awt.*;
 
@@ -28,7 +27,7 @@ public class LaserEffect implements BeaconEffect {
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
         beaconRenderSettings.poseStack.translate(0,0.5F,0);
-        beaconRenderSettings.poseStack.mulPose(Quaternion.fromXYZDegrees(new Vector3f(90,0,0)));
+        beaconRenderSettings.poseStack.mulPose(new Quaternionf().setAngleAxis((Math.PI/2), 1, 0, 0));
         beaconRenderSettings.poseStack.translate(0,-0.5F,0);
         return beaconRenderSettings;
     }

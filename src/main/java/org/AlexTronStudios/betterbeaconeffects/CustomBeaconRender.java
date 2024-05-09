@@ -1,8 +1,7 @@
 package org.AlexTronStudios.betterbeaconeffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -18,6 +17,8 @@ import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffectRegis
 import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 import org.AlexTronStudios.betterbeaconeffects.utils.Pair;
 import org.AlexTronStudios.betterbeaconeffects.utils.RenderUtils;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
     public static final ResourceLocation TEXTURE_OUT = new ResourceLocation("textures/misc/beacon_out.png");
     public static final ResourceLocation TEXTURE_IN = new ResourceLocation("textures/misc/beacon_in.png");
     public static final int MAX_RENDER_Y = 1024;
+
+    private static final Vector3f YP = new Vector3f(0,1,0);
 
     private static final float PiSin = (float) Math.sin((Math.PI / 4D));
 
@@ -127,18 +130,18 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         float f1 = (totalWorldTime + partialTicks) * 3.0F;
         float f2 = sinWave(totalWorldTime, partialTicks);
         matrixStackIn.translate(0.0D, 1.5F + f2 / 2.0F, 0.0D);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(f1));
-        matrixStackIn.mulPose(new Quaternion(new Vector3f(PiSin, 0.0F, PiSin), 60.0F, true));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(f1));
+        matrixStackIn.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.eyes(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         matrixStackIn.scale(0.875F, 0.875F, 0.875F);
-        matrixStackIn.mulPose(new Quaternion(new Vector3f(PiSin, 0.0F, PiSin), 60.0F, true));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(f1));
+        matrixStackIn.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(f1));
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.eyes(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         matrixStackIn.scale(0.875F, 0.875F, 0.875F);
-        matrixStackIn.mulPose(new Quaternion(new Vector3f(PiSin, 0.0F, PiSin), 60.0F, true));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(f1));
+        matrixStackIn.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(f1));
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_IN)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(matrixStackIn.last().pose(), bufferIn.getBuffer(RenderType.eyes(TEXTURE_IN)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         matrixStackIn.popPose();

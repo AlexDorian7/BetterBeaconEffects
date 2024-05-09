@@ -1,9 +1,9 @@
 package org.AlexTronStudios.betterbeaconeffects.utils;
 
-import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 public class MyMath {
 

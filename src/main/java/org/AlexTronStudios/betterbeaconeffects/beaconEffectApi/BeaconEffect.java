@@ -1,9 +1,6 @@
 package org.AlexTronStudios.betterbeaconeffects.beaconEffectApi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 
 public interface BeaconEffect {
     /**

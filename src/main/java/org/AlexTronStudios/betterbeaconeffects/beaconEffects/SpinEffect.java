@@ -1,12 +1,11 @@
 package org.AlexTronStudios.betterbeaconeffects.beaconEffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.joml.Quaternionf;
 
 import java.awt.*;
 
@@ -30,7 +29,7 @@ public class SpinEffect implements BeaconEffect {
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
         PoseStack stack = beaconRenderSettings.poseStack;
         float f = beaconRenderSettings.time + beaconRenderSettings.partialTicks;
-        stack.mulPose(Quaternion.fromXYZDegrees(new Vector3f(0,f,0)));
+        stack.mulPose(new Quaternionf().setAngleAxis(f, 0, 1, 0));
         return beaconRenderSettings;
     }
 }

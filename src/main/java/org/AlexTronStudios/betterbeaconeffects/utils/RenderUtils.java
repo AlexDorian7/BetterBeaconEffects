@@ -3,15 +3,15 @@ package org.AlexTronStudios.betterbeaconeffects.utils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,14 +160,21 @@ public class RenderUtils {
         }
 
         public static void bindTexture(ResourceLocation texture, boolean blur, boolean mipmap) {
-            RenderSystem.enableTexture();
+
+
+
+//            RenderSystem.enableTexture();
             TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
             texturemanager.bindForSetup(texture);
             texturemanager.getTexture(texture).setBlurMipmap(blur, mipmap);
         }
 
         public static void noTexture() {
-            RenderSystem.disableTexture();
+//            RenderSystem.disableTexture();
+            ResourceLocation texture = new ResourceLocation("textures/entity/beacon_beam_no_texture.png");
+            TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
+            texturemanager.bindForSetup(texture);
+            texturemanager.getTexture(texture).setBlurMipmap(false, false);
         }
 
         public static final Tesselator getTessellator() {
