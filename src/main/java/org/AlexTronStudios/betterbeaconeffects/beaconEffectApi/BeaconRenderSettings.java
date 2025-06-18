@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects.beaconEffectApi;
+package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

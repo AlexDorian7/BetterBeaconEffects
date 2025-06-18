@@ -1,16 +1,10 @@
-package org.AlexTronStudios.betterbeaconeffects.utils;
+package org.alextronstudios.betterbeaconeffects.utils;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
-import org.joml.Matrix3f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -43,7 +37,7 @@ public class RenderUtils {
     }
 
     public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a) {
-        renderTube(stackIn, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1, 15728880);
+        renderTube(stackIn, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1);
     }
 
     public static void renderPart(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, int u1, int v1, int u2, int v2) {
@@ -55,13 +49,11 @@ public class RenderUtils {
         renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
     }
 
-    public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, float u1, float v1, float u2, float v2, int uv2) {
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2, uv2);
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
-        renderFace(stackIn, bufferIn, convert(end.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
-        renderFace(stackIn, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, uv2);
-        //renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2);
-        //renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
+    public static void renderTube(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, float u1, float v1, float u2, float v2) {
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2);
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
+        renderFace(stackIn, bufferIn, convert(end.x()), convert(end.x()), convert(end.y()), convert(start.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
+        renderFace(stackIn, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
     }
 
     public static void renderLine3d(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float size, float r, float g, float b, float a) {
@@ -83,12 +75,9 @@ public class RenderUtils {
         VertexConsumer bufferIn = multiBufferSource.getBuffer(RenderType.LINES);
 
         Matrix4f stackIn = poseStack.last().pose();
-        Matrix3f normal = poseStack.last().normal();
-
-        bufferIn.vertex(stackIn, start.x(), start.y(), start.z()).color(r,g,b,a).normal(normal, 1,0,0).endVertex();
-        bufferIn.vertex(stackIn, end.x(), end.y(), end.z()).color(r,g,b,a).normal(normal, 1,0,0).endVertex();
-        //bufferIn.vertex(end.x(), end.y(), end.z()).color(r,g,b,a).normal(normal, 1,0,0).endVertex();
-        //bufferIn.vertex(start.x(), start.y(), start.z()).color(r,g,b,a).normal(normal, 0,1,0).endVertex();
+        
+        bufferIn.addVertex(stackIn, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), 1,0,0);
+        bufferIn.addVertex(stackIn, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), 1,0,0);
     }
 
     public static float convert(float in) {
@@ -103,26 +92,29 @@ public class RenderUtils {
     }
 
     public static void renderFace(Matrix4f matrix4f, VertexConsumer iVertexBuilder, float startX, float endX, float startY, float endY, float p_228884_8_, float p_228884_9_, float p_228884_10_, float p_228884_11_, float r, float g, float b, float a, int u1, int v1, int u2, int v2) {
-        iVertexBuilder.vertex(matrix4f, startX, startY, p_228884_8_).color(r, g, b, a).uv(u1,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, endX, startY, p_228884_9_).color(r, g, b, a).uv(u2,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, endX, endY, p_228884_10_).color(r, g, b, a).uv(u2,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, startX, endY, p_228884_11_).color(r, g, b, a).uv(u1,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(1,1).normal(0,1,0).endVertex();
+        iVertexBuilder.addVertex(matrix4f, startX, startY, p_228884_8_).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(1,1).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, endX, startY, p_228884_9_).setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(1,1).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, endX, endY, p_228884_10_).setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(1,1).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, startX, endY, p_228884_11_).setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(1,1).setNormal(0,1,0);
     }
 
-    public static void renderFace(Matrix4f matrix4f, VertexConsumer iVertexBuilder, float startX, float endX, float startY, float endY, float p_228884_8_, float p_228884_9_, float p_228884_10_, float p_228884_11_, float r, float g, float b, float a, float u1, float v1, float u2, float v2, int uv2) {
-        iVertexBuilder.vertex(matrix4f, startX, startY, p_228884_8_).color(r, g, b, a).uv(u1,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, endX, startY, p_228884_9_).color(r, g, b, a).uv(u2,v1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, endX, endY, p_228884_10_).color(r, g, b, a).uv(u2,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
-        iVertexBuilder.vertex(matrix4f, startX, endY, p_228884_11_).color(r, g, b, a).uv(u1,v2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(0,1,0).endVertex();
+    public static void renderFace(Matrix4f matrix4f, VertexConsumer iVertexBuilder, float startX, float endX, float startY, float endY, float p_228884_8_, float p_228884_9_, float p_228884_10_, float p_228884_11_, float r, float g, float b, float a, float u1, float v1, float u2, float v2) {
+        iVertexBuilder.addVertex(matrix4f, startX, startY, p_228884_8_).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, endX, startY, p_228884_9_).setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, endX, endY, p_228884_10_).setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0,1,0);
+        iVertexBuilder.addVertex(matrix4f, startX, endY, p_228884_11_).setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(0,1,0);
     }
 
     public static void renderFace(Matrix4f matrix4f, VertexConsumer vertexConsumer, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float r, float g, float b, float a, float u, float v, float u0, float v0, int i, int i1) {
-        vertexConsumer.vertex(matrix4f, v1.x(), v1.y(), v1.z()).color(r,g,b,a).uv(u,v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(i,i1).normal(0,1,0).endVertex();
-        vertexConsumer.vertex(matrix4f, v2.x(), v2.y(), v2.z()).color(r,g,b,a).uv(u0,v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(i,i1).normal(0,1,0).endVertex();
-        vertexConsumer.vertex(matrix4f, v3.x(), v3.y(), v3.z()).color(r,g,b,a).uv(u0,v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(i,i1).normal(0,1,0).endVertex();
-        vertexConsumer.vertex(matrix4f, v4.x(), v4.y(), v4.z()).color(r,g,b,a).uv(u,v0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(i,i1).normal(0,1,0).endVertex();
+        vertexConsumer.addVertex(matrix4f, v1.x(), v1.y(), v1.z()).setColor(r,g,b,a).setUv(u,v).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(i,i1).setNormal(0,1,0);
+        vertexConsumer.addVertex(matrix4f, v2.x(), v2.y(), v2.z()).setColor(r,g,b,a).setUv(u0,v).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(i,i1).setNormal(0,1,0);
+        vertexConsumer.addVertex(matrix4f, v3.x(), v3.y(), v3.z()).setColor(r,g,b,a).setUv(u0,v0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(i,i1).setNormal(0,1,0);
+        vertexConsumer.addVertex(matrix4f, v4.x(), v4.y(), v4.z()).setColor(r,g,b,a).setUv(u,v0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(i,i1).setNormal(0,1,0);
     }
 
+    private static void addVertex(PoseStack.Pose pose, VertexConsumer consumer, int color, int y, float x, float z, float u, float v) {
+        consumer.addVertex(pose, x, (float)y, z).setColor(color).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
+    }
 
     public static float xOffset(float f) {
         return f * 0.1F;
@@ -130,75 +122,5 @@ public class RenderUtils {
 
     public static float yOffset(float f) {
         return f * 0.01F;
-    }
-
-
-    //@SuppressWarnings("deprecation")
-    public static class RenderSystemManager {
-
-        private static final Tesselator TESSELLATOR = RenderSystem.renderThreadTesselator();
-        private static final BufferBuilder BUFFER_BUILDER = TESSELLATOR.getBuilder();
-
-        public static void defaultTransparency() {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        }
-
-        public static void additiveTransparency() {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        }
-
-        public static void electricTransparency() {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        }
-
-
-        public static void bindTexture(ResourceLocation texture) {
-            bindTexture(texture, false, false);
-        }
-
-        public static void bindTexture(ResourceLocation texture, boolean blur, boolean mipmap) {
-
-
-
-//            RenderSystem.enableTexture();
-            TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
-            texturemanager.bindForSetup(texture);
-            texturemanager.getTexture(texture).setBlurMipmap(blur, mipmap);
-        }
-
-        public static void noTexture() {
-//            RenderSystem.disableTexture();
-            ResourceLocation texture = new ResourceLocation("textures/entity/beacon_beam_no_texture.png");
-            TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
-            texturemanager.bindForSetup(texture);
-            texturemanager.getTexture(texture).setBlurMipmap(false, false);
-        }
-
-        public static final Tesselator getTessellator() {
-            return TESSELLATOR;
-        }
-
-        public static BufferBuilder getBuilder() {
-            return BUFFER_BUILDER;
-        }
-
-        public static void begin() {
-            begin(BUFFER_BUILDER);
-        }
-
-        protected static void begin(BufferBuilder bufferBuilder) {
-            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        }
-
-        public static void end() {
-            end(BUFFER_BUILDER);
-        }
-
-        protected static void end(BufferBuilder bufferBuilder) {
-            bufferBuilder.end();
-        }
     }
 }

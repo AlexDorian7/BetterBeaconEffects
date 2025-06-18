@@ -1,10 +1,10 @@
-package org.AlexTronStudios.betterbeaconeffects.beaconEffects;
+package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 import org.joml.Quaternionf;
 
 import java.awt.*;

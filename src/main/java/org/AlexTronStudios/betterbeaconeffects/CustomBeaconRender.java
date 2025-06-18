@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects;
+package org.alextronstudios.betterbeaconeffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -11,12 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffectRegistry;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
-import org.AlexTronStudios.betterbeaconeffects.utils.Pair;
-import org.AlexTronStudios.betterbeaconeffects.utils.RenderUtils;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffectRegistry;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.utils.Pair;
+import org.alextronstudios.betterbeaconeffects.utils.RenderUtils;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -26,9 +27,9 @@ import java.util.List;
 
 public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity> {
 
-    public static final ResourceLocation BEAM_LOCATION = new ResourceLocation("textures/entity/beacon_beam_no_texture.png");
-    public static final ResourceLocation TEXTURE_OUT = new ResourceLocation("textures/misc/beacon_out.png");
-    public static final ResourceLocation TEXTURE_IN = new ResourceLocation("textures/misc/beacon_in.png");
+    public static final ResourceLocation BEAM_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/beacon_beam_no_texture.png");
+    public static final ResourceLocation TEXTURE_OUT = ResourceLocation.withDefaultNamespace("textures/misc/beacon_out.png");
+    public static final ResourceLocation TEXTURE_IN = ResourceLocation.withDefaultNamespace("textures/misc/beacon_in.png");
     public static final int MAX_RENDER_Y = 1024;
 
     private static final Vector3f YP = new Vector3f(0,1,0);
@@ -64,7 +65,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
                 }
             }
         }
-        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, i, 0, 0, new float[]{0, 0, 0}, new ResourceLocation(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
+        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, i, 0, 0, new float[]{0, 0, 0}, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
         for (ResourceLocation activeEffect : activeEffects) {
             BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(activeEffect);
             if (effect.hasCustomRender()) {
@@ -80,14 +81,14 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         }
     }
 
-    public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, List<ResourceLocation> activeEffects, @Nullable BeaconEffect renderer) {
+    public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, int color, List<ResourceLocation> activeEffects, @Nullable BeaconEffect renderer) {
 
         poseStack.pushPose();
 
         poseStack.translate(0.5F,0,0.5F);
 
-        float[] c = {color[0], color[1], color[2]};
-        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, time, baseHeight, height, c, new ResourceLocation(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
+        float[] c = {((color>>16)&0xFF)/256f, ((color>>8)&0xFF)/256f, (color&0xFF)/256f};
+        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, time, baseHeight, height, c, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
 
         for (ResourceLocation activeEffect : activeEffects) {
             BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(activeEffect);
@@ -103,7 +104,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
             for (int i=0; i<settings.beams; i++) {
                 float s = i*4+4;
                 float s1 = s/2;
-                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, settings.height*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F), 15728880);
+                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, settings.height*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F));
             }
         }
 
@@ -147,13 +148,20 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         matrixStackIn.popPose();
     }
 
-    @Override
-    public boolean shouldRenderOffScreen(BeaconBlockEntity p_112306_) {
+    public boolean shouldRenderOffScreen(BeaconBlockEntity blockEntity) {
         return true;
     }
 
-    @Override
-    public boolean shouldRender(BeaconBlockEntity p_173568_, Vec3 p_173569_) {
-        return true;
+    public int getViewDistance() {
+        return 256;
+    }
+
+    public boolean shouldRender(BeaconBlockEntity blockEntity, Vec3 cameraPos) {
+        return Vec3.atCenterOf(blockEntity.getBlockPos()).multiply(1.0, 0.0, 1.0).closerThan(cameraPos.multiply(1.0, 0.0, 1.0), (double)this.getViewDistance());
+    }
+
+    public AABB getRenderBoundingBox(BeaconBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(pos.getX(), pos.getY(), pos.getZ(), (double)pos.getX() + 1.0, 1024.0, (double)pos.getZ() + 1.0);
     }
 }

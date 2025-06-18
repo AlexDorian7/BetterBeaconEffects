@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects.utils;
+package org.alextronstudios.betterbeaconeffects.utils;
 
 public class Pair<F, S> {
     public F first;

@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects.utils;
+package org.alextronstudios.betterbeaconeffects.utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;

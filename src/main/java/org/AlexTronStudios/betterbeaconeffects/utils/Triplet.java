@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects.utils;
+package org.alextronstudios.betterbeaconeffects.utils;
 
 public class Triplet<F, S, T> {
     public F first;

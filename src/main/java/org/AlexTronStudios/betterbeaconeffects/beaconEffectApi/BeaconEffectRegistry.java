@@ -1,9 +1,9 @@
-package org.AlexTronStudios.betterbeaconeffects.beaconEffectApi;
+package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import org.AlexTronStudios.betterbeaconeffects.utils.Pair;
+import org.alextronstudios.betterbeaconeffects.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

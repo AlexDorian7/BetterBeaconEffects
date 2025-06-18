@@ -1,15 +1,12 @@
-package org.AlexTronStudios.betterbeaconeffects.beaconEffects;
+package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CryingObsidianBlock;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
-import org.AlexTronStudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 
 import java.awt.*;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package org.AlexTronStudios.betterbeaconeffects.beaconEffectApi;
+package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import net.minecraft.world.level.block.Block;
 
