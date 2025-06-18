@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +54,14 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
 
         BeaconEffect renderer = null;
 
+        boolean glassRendering = false;
+
+        BlockPos glassPos = blockEntity.getBlockPos().offset(0,1,0);
+        if (blockEntity.getLevel().getBlockState(glassPos).getBlock().equals(Blocks.GLASS)) {
+            glassRendering = true;
+            RenderUtils.renderLineCube(poseStack, multiBufferSource, new Vector3f(-3.001f, -3.001f, -3.001f), new Vector3f(4.001f, 4.001f, 4.001f), 1, 1, 1, 1);
+        }
+
         for (int x = -3; x < 4; x++) {
             for (int y = -3; y < 4; y++) {
                 for (int z = -3; z < 4; z++) {
@@ -60,6 +69,10 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
                         BlockPos pos = blockEntity.getBlockPos().offset(x,y,z);
                         if (blockEntity.getLevel().getBlockState(pos).getBlock().equals(block.second)) {
                             activeEffects.add(block.first);
+                            if (glassRendering) {
+                                BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(block.first);
+                                RenderUtils.renderLineCube(poseStack, multiBufferSource, new Vector3f(x-0.001f, y-0.001f, z-0.001f), new Vector3f(x+1.001f, y+1.001f, z+1.001f), ((effect.getColor()>>16)&0xFF)/256F,((effect.getColor()>>8)&0xFF)/256F, (effect.getColor()&0xFF)/256F, 1);
+                            }
                         }
                     }
                 }
@@ -162,6 +175,6 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
 
     public AABB getRenderBoundingBox(BeaconBlockEntity blockEntity) {
         BlockPos pos = blockEntity.getBlockPos();
-        return new AABB(pos.getX(), pos.getY(), pos.getZ(), (double)pos.getX() + 1.0, 1024.0, (double)pos.getZ() + 1.0);
+        return new AABB(pos.getX() - 3.0, pos.getY() - 3, pos.getZ() - 3, (double)pos.getX() + 3.0, 1024.0, (double)pos.getZ() + 3.0);
     }
 }

@@ -18,20 +18,6 @@ public class RenderUtils {
 
     public static final float SIN_45 = (float)Math.sin((Math.PI / 4D));
 
-    private static void addToList() {
-        if (!listLoaded) {
-            vectorPairs.add(new Triplet<>(-1/16F,-1/16F, -1/16F));
-            vectorPairs.add(new Triplet<>(-1/16F, -1/16F,1/16F));
-            vectorPairs.add(new Triplet<>(1/16F, 1/16F,1/16F));
-            vectorPairs.add(new Triplet<>(1/16F, 1/16F,-1/16F));
-            lines.add(new Pair<>(0,1));
-            lines.add(new Pair<>(1,2));
-            lines.add(new Pair<>(2,3));
-            lines.add(new Pair<>(3,0));
-            listLoaded = true;
-        }
-    }
-
     public static void renderPart(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a) {
         renderPart(stackIn, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1);
     }
@@ -56,28 +42,52 @@ public class RenderUtils {
         renderFace(stackIn, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2);
     }
 
-    public static void renderLine3d(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float size, float r, float g, float b, float a) {
-        renderLine3d(stackIn, bufferIn, start, end, size, r, g, b, a, 0, 0, 1, 1, 0, 1);
+    public static void renderLineCube(PoseStack poseStack, MultiBufferSource multiBufferSource, Vector3f start, Vector3f end, float r, float g, float b, float a) {
+        Vector3f ca = start;
+        Vector3f cb = new Vector3f(start.x, start.y, end.z);
+        Vector3f cc = new Vector3f(end.x, start.y, end.z);
+        Vector3f cd = new Vector3f(end.x, start.y, start.z);
+        Vector3f ce = new Vector3f(start.x, end.y, start.z);
+        Vector3f cf = new Vector3f(start.x, end.y, end.z);
+        Vector3f cg = end;
+        Vector3f ch = new Vector3f(end.x, end.y, start.z);
+
+        VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.lines());
+        renderLine(poseStack, vertexConsumer, ca, cb, r, g, b, a); // bottom
+        renderLine(poseStack, vertexConsumer, cb, cc, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, cc, cd, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, cd, ca, r, g, b, a);
+
+        renderLine(poseStack, vertexConsumer, ce, cf, r, g, b, a); // top
+        renderLine(poseStack, vertexConsumer, cf, cg, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, cg, ch, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, ch, ce, r, g, b, a);
+
+        renderLine(poseStack, vertexConsumer, ca, ce, r, g, b, a); // sides
+        renderLine(poseStack, vertexConsumer, cb, cf, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, cc, cg, r, g, b, a);
+        renderLine(poseStack, vertexConsumer, cd, ch, r, g, b, a);
     }
 
-    public static void renderLine3d(Matrix4f stackIn, VertexConsumer bufferIn, Vector3f start, Vector3f end, float size, float r, float g, float b, float a, float u, float v, float u1, float v1, int u2, int v2) {
-        addToList();
-        for (Pair<Integer, Integer> line : lines) {
-            Vector3f st = new Vector3f(start.x()+vectorPairs.get(line.first).first*size, start.y()+vectorPairs.get(line.first).second*size, start.z()+vectorPairs.get(line.first).third*size);
-            Vector3f nd = new Vector3f(end.x()+vectorPairs.get(line.first).first*size, end.y()+vectorPairs.get(line.first).second*size, end.z()+vectorPairs.get(line.first).third*size);
-            Vector3f th = new Vector3f(start.x()+vectorPairs.get(line.second).first*size, start.y()+vectorPairs.get(line.second).second*size, start.z()+vectorPairs.get(line.second).third*size);
-            Vector3f rd = new Vector3f(end.x()+vectorPairs.get(line.second).first*size, end.y()+vectorPairs.get(line.second).second*size, end.z()+vectorPairs.get(line.second).third*size);
-            RenderUtils.renderFace(stackIn, bufferIn, st, nd, rd, th, r, g, b, a, u, v, u1, v1, u2, v2);
-        }
+    private static void renderLine(PoseStack poseStack, VertexConsumer vertexConsumer, Vector3f start, Vector3f end, float r, float g, float b, float a) {
+        Matrix4f stackIn = poseStack.last().pose();
+        float endX = end.x - start.x;
+        float endY = end.y - start.y;
+        float endZ = end.z - start.z;
+        vertexConsumer.addVertex(stackIn, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), endX, endY, endZ);
+        vertexConsumer.addVertex(stackIn, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), -endX, -endY, -endZ);
     }
 
     public static void renderLine(PoseStack poseStack, MultiBufferSource multiBufferSource, Vector3f start, Vector3f end, float r, float g, float b, float a) {
-        VertexConsumer bufferIn = multiBufferSource.getBuffer(RenderType.LINES);
-
+        VertexConsumer bufferIn = multiBufferSource.getBuffer(RenderType.lines());
         Matrix4f stackIn = poseStack.last().pose();
-        
-        bufferIn.addVertex(stackIn, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), 1,0,0);
-        bufferIn.addVertex(stackIn, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), 1,0,0);
+
+        float endX = end.x - start.x;
+        float endY = end.y - start.y;
+        float endZ = end.z - start.z;
+
+        bufferIn.addVertex(stackIn, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), endX, endY, endZ);
+        bufferIn.addVertex(stackIn, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), -endX,-endY,-endZ);
     }
 
     public static float convert(float in) {
