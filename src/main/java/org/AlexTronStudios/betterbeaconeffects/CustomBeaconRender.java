@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity> {
-
     public static final ResourceLocation BEAM_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/beacon_beam_no_texture.png");
     public static final ResourceLocation TEXTURE_OUT = ResourceLocation.withDefaultNamespace("textures/misc/beacon_out.png");
     public static final ResourceLocation TEXTURE_IN = ResourceLocation.withDefaultNamespace("textures/misc/beacon_in.png");
@@ -45,9 +45,6 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         long i = blockEntity.getLevel().getGameTime();
 
         renderNetherStar(poseStack, multiBufferSource, 4, i, partialTicks); //Render the star inside
-
-        List<BeaconBlockEntity.BeaconBeamSection> list = blockEntity.getBeamSections();
-        int j = 0;
 
         List<Pair<ResourceLocation, Block>> blocks = BeaconEffectRegistry.getBlockRegistry();
         List<ResourceLocation> activeEffects = new ArrayList<>();
@@ -87,6 +84,9 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
             effect.customRenderStep(settings);
         }
 
+        List<BeaconBlockEntity.BeaconBeamSection> list = blockEntity.getBeamSections();
+        int j = 0;
+
         for(int k = 0; k < list.size(); ++k) {
             BeaconBlockEntity.BeaconBeamSection beaconblockentity$beaconbeamsection = list.get(k);
             renderBeaconBeam(blockEntity, poseStack, multiBufferSource, partialTicks, i, j, k == list.size() - 1 ? MAX_RENDER_Y : beaconblockentity$beaconbeamsection.getHeight(), beaconblockentity$beaconbeamsection.getColor(), activeEffects, renderer);
@@ -117,7 +117,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
             for (int i=0; i<settings.beams; i++) {
                 float s = i*4+4;
                 float s1 = s/2;
-                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, settings.height*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F));
+                RenderUtils.renderTube(poseStack.last().pose(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, (settings.height + settings.baseHeight)*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F));
             }
         }
 

@@ -3,10 +3,12 @@ package org.alextronstudios.betterbeaconeffects.beaconEffects;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class MagicEffect implements BeaconEffect {
 

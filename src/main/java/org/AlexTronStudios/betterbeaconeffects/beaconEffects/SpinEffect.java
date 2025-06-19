@@ -29,7 +29,7 @@ public class SpinEffect implements BeaconEffect {
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
         PoseStack stack = beaconRenderSettings.poseStack;
         float f = beaconRenderSettings.time + beaconRenderSettings.partialTicks;
-        stack.mulPose(new Quaternionf().setAngleAxis(f, 0, 1, 0));
+        stack.mulPose(new Quaternionf().setAngleAxis(f * (3.14159265f/40), 0, 1, 0)); // 4 rotations / second
         return beaconRenderSettings;
     }
 }

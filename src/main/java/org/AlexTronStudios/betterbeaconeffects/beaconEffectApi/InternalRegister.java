@@ -2,6 +2,7 @@ package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import net.minecraft.resources.ResourceLocation;
 import org.alextronstudios.betterbeaconeffects.beaconEffects.*;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;
 
@@ -9,7 +10,7 @@ public class InternalRegister {
 
     private static boolean registered = false;
 
-    @Deprecated
+    @ApiStatus.Internal
     /**
      * Do not use. For internal Mod use only!
      * If you need to register an effect see: BeaconEffectRegistry$register
