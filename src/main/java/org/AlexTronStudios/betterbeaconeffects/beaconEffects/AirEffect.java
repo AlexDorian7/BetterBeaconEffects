@@ -28,16 +28,6 @@ public class AirEffect implements BeaconEffect {
     }
 
     @Override
-    public boolean hasCustomRender() {
-        return true;
-    }
-
-    @Override
-    public void customRenderer(BeaconRenderSettings settings) {
-        BeaconEffect.super.customRenderer(settings);
-    }
-
-    @Override
     public void customRenderStep(BeaconRenderSettings settings) {
         BeaconEffect.super.customRenderStep(settings);
     }
