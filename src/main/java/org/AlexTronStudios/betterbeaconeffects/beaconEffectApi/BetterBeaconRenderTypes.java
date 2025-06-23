@@ -27,6 +27,11 @@ public class BetterBeaconRenderTypes {
     }
 
     private static ShaderInstance RENDERTYPE_COLORED_PORTAL_SHADER;
+    private static ShaderInstance RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER;
+
+    public ShaderInstance getBeaconBeamCutoutShader() {
+        return RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER;
+    }
 
     private ShaderInstance getColoredPortalShader() {
         return RENDERTYPE_COLORED_PORTAL_SHADER;
@@ -62,9 +67,26 @@ public class BetterBeaconRenderTypes {
             }
     );
 
+    public final Function<ResourceLocation, RenderType> BEACON_BEAM_CUTOUT = Util.memoize(
+            (texture) -> {
+                RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
+                        .setShaderState(new ShaderStateShard(this::getBeaconBeamCutoutShader))
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setTransparencyState(NO_TRANSPARENCY)
+                        .setWriteMaskState(COLOR_DEPTH_WRITE)
+                        .createCompositeState(false);
+                return RenderType.create("beacon_beam_cutout", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 1536, false, true, rendertype$compositestate);
+            }
+    );
+
+    public RenderType beaconBeamCutout(ResourceLocation texture) {
+        return BEACON_BEAM_CUTOUT.apply(texture);
+    }
+
     public void registerShaders(RegisterShadersEvent event) {
         try {
             event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.withDefaultNamespace("rendertype_colored_portal"), DefaultVertexFormat.POSITION_COLOR), (shader) -> RENDERTYPE_COLORED_PORTAL_SHADER = shader);
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.withDefaultNamespace("rendertype_beacon_beam_cutout"), DefaultVertexFormat.BLOCK), (shader) -> RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER = shader);
         } catch (IOException e) {
             throw new RuntimeException("could not reload better beacon effect shaders", e);
         }

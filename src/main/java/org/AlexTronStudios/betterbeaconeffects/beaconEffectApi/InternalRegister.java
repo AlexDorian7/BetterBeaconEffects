@@ -35,6 +35,7 @@ public class InternalRegister {
         register("nether_effect", NetherEffect::new);
         register("negate_effect", NegateEffect::new);
         register("colored_magic_effect", ColoredMagicEffect::new);
+        register("air_effect", AirEffect::new);
 
         registered = true;
     }
