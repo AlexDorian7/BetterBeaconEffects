@@ -1,3 +1,6 @@
+# render doc captures
+*.rdc
+
 # eclipse
 bin
 *.launch
