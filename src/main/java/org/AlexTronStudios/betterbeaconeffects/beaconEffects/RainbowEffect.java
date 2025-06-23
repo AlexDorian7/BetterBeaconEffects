@@ -1,11 +1,12 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class RainbowEffect implements BeaconEffect {
     @Override
@@ -20,7 +21,7 @@ public class RainbowEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return new Color(0,0,0).getRGB();
+        return FastColor.ARGB32.color(0,0,0);
     }
 
     @Override

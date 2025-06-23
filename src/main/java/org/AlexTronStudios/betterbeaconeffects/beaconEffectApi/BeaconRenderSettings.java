@@ -32,7 +32,7 @@ public class BeaconRenderSettings {
         this.texture = texture;
         this.alpha = alpha;
         this.beams = beams;
-        this.renderType = RenderType.beaconBeam(this.texture, true);
+        this.renderType = BetterBeaconRenderTypes.getInstance().BEACON_BEAM_TRANSLUCENT.apply(this.texture);
     }
 
     /**

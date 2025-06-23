@@ -1,12 +1,11 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
-
-import java.awt.*;
 
 public class DebugEffect implements BeaconEffect {
     @Override
@@ -21,7 +20,7 @@ public class DebugEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return new Color(255, 232, 119).getRGB();
+        return FastColor.ARGB32.color(255, 232, 119);
     }
 
     @Override

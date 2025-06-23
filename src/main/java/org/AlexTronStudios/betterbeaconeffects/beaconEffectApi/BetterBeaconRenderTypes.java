@@ -2,6 +2,7 @@ package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -10,10 +11,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 import java.io.IOException;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static net.minecraft.client.renderer.RenderStateShard.*;
 
 
 public class BetterBeaconRenderTypes {
-    public static final BetterBeaconRenderTypes INSTANCE = new BetterBeaconRenderTypes();
+    private static final BetterBeaconRenderTypes INSTANCE = new BetterBeaconRenderTypes();
 
     private BetterBeaconRenderTypes() {}
 
@@ -22,6 +27,11 @@ public class BetterBeaconRenderTypes {
     }
 
     private static ShaderInstance RENDERTYPE_COLORED_PORTAL_SHADER;
+
+    private ShaderInstance getColoredPortalShader() {
+        return RENDERTYPE_COLORED_PORTAL_SHADER;
+    }
+
     public final RenderType COLORED_PORTAL = RenderType.create(
             "colored_portal",
             DefaultVertexFormat.POSITION_COLOR,
@@ -40,9 +50,17 @@ public class BetterBeaconRenderTypes {
                     .createCompositeState(false)
     );
 
-    public ShaderInstance getColoredPortalShader() {
-        return RENDERTYPE_COLORED_PORTAL_SHADER;
-    }
+    public final Function<ResourceLocation, RenderType> BEACON_BEAM_TRANSLUCENT = Util.memoize(
+            (texture) -> {
+                RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
+                        .setShaderState(RENDERTYPE_BEACON_BEAM_SHADER)
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setWriteMaskState(COLOR_WRITE)
+                        .createCompositeState(false);
+                return RenderType.create("beacon_beam", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 1536, false, true, rendertype$compositestate);
+            }
+    );
 
     public void registerShaders(RegisterShadersEvent event) {
         try {

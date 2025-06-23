@@ -15,6 +15,7 @@ uniform vec4 FogColor;
 uniform mat4 ProjMat;
 
 in vec4 texProj0;
+in vec4 vertexColor;
 
 const mat4 SCALE_TRANSLATE = mat4(
     0.5, 0.0, 0.0, 0.25,
@@ -43,7 +44,7 @@ out vec4 fragColor;
 void main() {
     vec3 color = textureProj(Sampler0, texProj0).rgb * vec3(0.022087, 0.098399, 0.110818);
     for (int i = 0; i < EndPortalLayers; i++) {
-        color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * ColorModulator.rgb;
+        color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vertexColor.rgb;
     }
     float fragmentDistance = -ProjMat[3].z / ((gl_FragCoord.z) * -2.0 + 1.0 - ProjMat[2].z);
     fragColor = linear_fog(vec4(color, 1.0), fragmentDistance, FogStart, FogEnd, FogColor);

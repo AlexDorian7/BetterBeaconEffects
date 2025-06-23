@@ -5,26 +5,28 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
 
-public class AddBeamEffect implements BeaconEffect {
+public class ColoredMagicEffect implements BeaconEffect {
+
     @Override
     public String getName() {
-        return "Add Beam Effect";
+        return "Colored Magic Effect";
     }
 
     @Override
     public Block getBlock() {
-        return Blocks.SLIME_BLOCK;
+        return Blocks.END_STONE_BRICKS;
     }
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(0, 255, 0);
+        return FastColor.ARGB32.color(255, 255, 191, 100);
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        beaconRenderSettings.beams++;
+        beaconRenderSettings.renderType = BetterBeaconRenderTypes.getInstance().COLORED_PORTAL;
         return beaconRenderSettings;
     }
 }

@@ -1,12 +1,11 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
-
-import java.awt.*;
 
 public class TextureEffect implements BeaconEffect {
 
@@ -23,7 +22,7 @@ public class TextureEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return new Color(127, 127, 127).getRGB();
+        return FastColor.ARGB32.color(127, 127, 127);
     }
 
     @Override
