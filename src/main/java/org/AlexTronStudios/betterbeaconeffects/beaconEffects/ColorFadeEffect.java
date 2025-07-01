@@ -1,6 +1,5 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -22,7 +21,7 @@ public class ColorFadeEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ABGR32.color(255, 255,0,127);
+        return 0xFF007F;
     }
 
     @Override

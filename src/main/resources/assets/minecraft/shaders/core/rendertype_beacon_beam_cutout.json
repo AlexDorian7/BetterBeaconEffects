@@ -1,6 +1,6 @@
 {
-    "vertex": "rendertype_beacon_beam_cutout",
-    "fragment": "rendertype_beacon_beam_cutout",
+    "vertex": "core/rendertype_beacon_beam_cutout",
+    "fragment": "core/rendertype_beacon_beam_cutout",
     "samplers": [
         { "name": "Sampler0" }
     ],

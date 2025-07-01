@@ -1,6 +1,5 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
@@ -21,7 +20,7 @@ public class ColoredMagicEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255, 255, 191, 100);
+        return 0xFFBF64;
     }
 
     @Override

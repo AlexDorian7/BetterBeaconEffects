@@ -1,7 +1,6 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
@@ -21,7 +20,7 @@ public class SpinEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(0, 255, 255);
+        return 0x00FFFF;
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,7 +28,7 @@ public class NetherEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255,127,0);
+        return 0xFF7F00;
     }
 
     @Override

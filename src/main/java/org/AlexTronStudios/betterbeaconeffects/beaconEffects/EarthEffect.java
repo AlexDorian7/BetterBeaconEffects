@@ -3,7 +3,6 @@ package org.alextronstudios.betterbeaconeffects.beaconEffects;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -34,7 +33,7 @@ public class EarthEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(63, 31, 0);
+        return 0x3F1F00;
     }
 
     @Override

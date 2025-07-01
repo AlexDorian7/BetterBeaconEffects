@@ -1,6 +1,6 @@
 {
-    "vertex": "rendertype_border_parallax_old",
-    "fragment": "rendertype_border_parallax_old",
+    "vertex": "core/rendertype_border_parallax_old",
+    "fragment": "core/rendertype_border_parallax_old",
     "samplers": [
         { "name": "Sampler0" },
         { "name": "Sampler1" }

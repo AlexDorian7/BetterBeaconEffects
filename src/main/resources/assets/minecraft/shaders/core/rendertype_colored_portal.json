@@ -1,6 +1,6 @@
 {
-    "vertex": "rendertype_colored_portal",
-    "fragment": "rendertype_colored_portal",
+    "vertex": "core/rendertype_colored_portal",
+    "fragment": "core/rendertype_colored_portal",
     "samplers": [
         { "name": "Sampler0" },
         { "name": "Sampler1" }

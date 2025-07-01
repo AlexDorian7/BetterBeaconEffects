@@ -1,7 +1,6 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
@@ -22,7 +21,7 @@ public class ParallaxEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(63, 63, 63);
+        return 0x3F3F3F;
     }
 
     @Override
