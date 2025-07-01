@@ -29,10 +29,10 @@ public class RenderUtils {
     }
 
     public static void renderTubeVortex(PoseStack.Pose pose, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a, float u1, float v1, float u2, float v2) {
-        renderFace(pose, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u2, v2, u1, v1, 0, 0, 1); // south
-        renderFace(pose, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, 0, 0, -1); // north
-        renderFace(pose, bufferIn, convert(end.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, 1, 0, 0); // east
-        renderFace(pose, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u2, v2, u1, v1, -1, 0, 0); // west
+        renderFace(pose, bufferIn, convert(start.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(end.z()), convert(end.z()), convert(end.z()), r, g, b, a, u2, v1, u1, v2, 0, 0, 1); // south
+        renderFace(pose, bufferIn, convert(end.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(start.z()), convert(start.z()), convert(start.z()), r, g, b, a, u1, v1, u2, v2, 0, 0, -1); // north
+        renderFace(pose, bufferIn, convert(end.x()), convert(end.x()), convert(start.y()), convert(end.y()), convert(end.z()), convert(start.z()), convert(start.z()), convert(end.z()), r, g, b, a, u1, v1, u2, v2, 1, 0, 0); // east
+        renderFace(pose, bufferIn, convert(start.x()), convert(start.x()), convert(start.y()), convert(end.y()), convert(start.z()), convert(end.z()), convert(end.z()), convert(start.z()), r, g, b, a, u2, v1, u1, v2, -1, 0, 0); // west
     }
 
     public static void renderTubePoly(PoseStack.Pose pose, VertexConsumer vertexConsumer, int sides, float radius, float baseHeight, float height, float r, float g, float b, float a) {
@@ -76,10 +76,15 @@ public class RenderUtils {
             normal1.normalize();
             normal2.normalize();
 
-            vertexConsumer.addVertex(pose, x1*radiusl, baseHeight, y1*radiusl)          .setUv(alpha+u , v)           .setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, normal1.x, normal1.y, normal1.z);
+            vertexConsumer.addVertex(pose, x1*radiusl, baseHeight, y1*radiusl)          .setUv(alpha+u , v)           .setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, normal1.x, normal1.y, normal1.z); // Front Face
             vertexConsumer.addVertex(pose, x1*radiush, baseHeight+height, y1*radiush).setUv(alpha+u , height+v).setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, normal1.x, normal1.y, normal1.z);
             vertexConsumer.addVertex(pose, x2*radiush, baseHeight+height, y2*radiush).setUv(alpha1+u, height+v).setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, normal2.x, normal2.y, normal2.z);
             vertexConsumer.addVertex(pose, x2*radiusl, baseHeight, y2*radiusl)          .setUv(alpha1+u, v)           .setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, normal2.x, normal2.y, normal2.z);
+
+            vertexConsumer.addVertex(pose, x1*radiusl, baseHeight, y1*radiusl)          .setUv(alpha+u , v)           .setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, -normal1.x, -normal1.y, -normal1.z); // Back Face
+            vertexConsumer.addVertex(pose, x2*radiusl, baseHeight, y2*radiusl)          .setUv(alpha1+u, v)           .setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, -normal2.x, -normal2.y, -normal2.z);
+            vertexConsumer.addVertex(pose, x2*radiush, baseHeight+height, y2*radiush).setUv(alpha1+u, height+v).setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, -normal2.x, -normal2.y, -normal2.z);
+            vertexConsumer.addVertex(pose, x1*radiush, baseHeight+height, y1*radiush).setUv(alpha+u , height+v).setColor(r, g, b, a).setLight(15728880).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(pose, -normal1.x, -normal1.y, -normal1.z);
         }
     }
 

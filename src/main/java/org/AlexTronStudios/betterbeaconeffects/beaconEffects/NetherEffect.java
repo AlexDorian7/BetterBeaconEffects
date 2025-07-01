@@ -12,6 +12,7 @@ import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSetti
 import java.awt.Color;
 import java.util.Random;
 
+
 public class NetherEffect implements BeaconEffect {
 
     private static final Random RANDOM = new Random();

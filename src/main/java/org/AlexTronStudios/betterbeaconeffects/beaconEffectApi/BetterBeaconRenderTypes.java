@@ -18,26 +18,23 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 
 
 public class BetterBeaconRenderTypes {
-    private static final BetterBeaconRenderTypes INSTANCE = new BetterBeaconRenderTypes();
-
-    private BetterBeaconRenderTypes() {}
-
-    public static BetterBeaconRenderTypes getInstance() {
-        return INSTANCE;
-    }
-
     private static ShaderInstance RENDERTYPE_COLORED_PORTAL_SHADER;
     private static ShaderInstance RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER;
+    private static ShaderInstance RENDERTYPE_BORDER_PARALLAX_SHADER;
 
-    public ShaderInstance getBeaconBeamCutoutShader() {
+    private static ShaderInstance getBeaconBeamCutoutShader() {
         return RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER;
     }
 
-    private ShaderInstance getColoredPortalShader() {
+    private static ShaderInstance getColoredPortalShader() {
         return RENDERTYPE_COLORED_PORTAL_SHADER;
     }
 
-    public final RenderType COLORED_PORTAL = RenderType.create(
+    private static ShaderInstance getRendertypeBorderParallaxShader() {
+        return RENDERTYPE_BORDER_PARALLAX_SHADER;
+    }
+
+    public static final RenderType COLORED_PORTAL = RenderType.create(
             "colored_portal",
             DefaultVertexFormat.POSITION_COLOR,
             VertexFormat.Mode.QUADS,
@@ -45,7 +42,7 @@ public class BetterBeaconRenderTypes {
             false,
             false,
             RenderType.CompositeState.builder()
-                    .setShaderState(new RenderStateShard.ShaderStateShard(this::getColoredPortalShader))
+                    .setShaderState(new RenderStateShard.ShaderStateShard(BetterBeaconRenderTypes::getColoredPortalShader))
                     .setTextureState(
                             RenderStateShard.MultiTextureStateShard.builder()
                                     .add(TheEndPortalRenderer.END_SKY_LOCATION, false, false)
@@ -55,7 +52,7 @@ public class BetterBeaconRenderTypes {
                     .createCompositeState(false)
     );
 
-    public final Function<ResourceLocation, RenderType> BEACON_BEAM_TRANSLUCENT = Util.memoize(
+    private static final Function<ResourceLocation, RenderType> BEACON_BEAM_TRANSLUCENT = Util.memoize(
             (texture) -> {
                 RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
                         .setShaderState(RENDERTYPE_BEACON_BEAM_SHADER)
@@ -67,10 +64,10 @@ public class BetterBeaconRenderTypes {
             }
     );
 
-    public final Function<ResourceLocation, RenderType> BEACON_BEAM_CUTOUT = Util.memoize(
+    private static final Function<ResourceLocation, RenderType> BEACON_BEAM_CUTOUT = Util.memoize(
             (texture) -> {
                 RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
-                        .setShaderState(new ShaderStateShard(this::getBeaconBeamCutoutShader))
+                        .setShaderState(new ShaderStateShard(BetterBeaconRenderTypes::getBeaconBeamCutoutShader))
                         .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                         .setTransparencyState(NO_TRANSPARENCY)
                         .setWriteMaskState(COLOR_DEPTH_WRITE)
@@ -79,14 +76,35 @@ public class BetterBeaconRenderTypes {
             }
     );
 
-    public RenderType beaconBeamCutout(ResourceLocation texture) {
+    private static final Function<ResourceLocation, RenderType> BORDER_PARALLAX = Util.memoize(
+            (texture) -> {
+                RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
+                        .setShaderState(new ShaderStateShard(BetterBeaconRenderTypes::getRendertypeBorderParallaxShader))
+                        .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                        .setTransparencyState(NO_TRANSPARENCY)
+                        .setWriteMaskState(COLOR_DEPTH_WRITE)
+                        .createCompositeState(false);
+                return RenderType.create("border_parallax", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 1536, false, true, rendertype$compositestate);
+            }
+    );
+
+    public static RenderType beaconBeamTranslucent(ResourceLocation texture) {
+        return BEACON_BEAM_TRANSLUCENT.apply(texture);
+    }
+
+    public static RenderType beaconBeamCutout(ResourceLocation texture) {
         return BEACON_BEAM_CUTOUT.apply(texture);
     }
 
-    public void registerShaders(RegisterShadersEvent event) {
+    public static RenderType borderParallax(ResourceLocation texture) {
+        return BORDER_PARALLAX.apply(texture);
+    }
+
+    public static void registerShaders(RegisterShadersEvent event) {
         try {
             event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.withDefaultNamespace("rendertype_colored_portal"), DefaultVertexFormat.POSITION_COLOR), (shader) -> RENDERTYPE_COLORED_PORTAL_SHADER = shader);
             event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.withDefaultNamespace("rendertype_beacon_beam_cutout"), DefaultVertexFormat.BLOCK), (shader) -> RENDERTYPE_BEACON_BEAM_CUTOUT_SHADER = shader);
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.withDefaultNamespace("rendertype_border_parallax"), DefaultVertexFormat.BLOCK), (shader) -> RENDERTYPE_BORDER_PARALLAX_SHADER = shader);
         } catch (IOException e) {
             throw new RuntimeException("could not reload better beacon effect shaders", e);
         }

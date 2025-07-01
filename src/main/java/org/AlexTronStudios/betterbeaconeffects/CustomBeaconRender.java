@@ -18,8 +18,10 @@ import net.minecraft.world.phys.Vec3;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffectRegistry;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
 import org.alextronstudios.betterbeaconeffects.utils.Pair;
 import org.alextronstudios.betterbeaconeffects.utils.RenderUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -27,20 +29,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity> {
-    public static final ResourceLocation BEAM_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/beacon_beam_no_texture.png");
-    public static final ResourceLocation TEXTURE_OUT = ResourceLocation.withDefaultNamespace("textures/misc/beacon_out.png");
-    public static final ResourceLocation TEXTURE_IN = ResourceLocation.withDefaultNamespace("textures/misc/beacon_in.png");
+    public static final ResourceLocation BEAM_LOCATION = ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/entity/beacon_beam_no_texture.png");
+    public static final ResourceLocation TEXTURE_OUT = ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/beacon_out.png");
+    public static final ResourceLocation TEXTURE_IN = ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/beacon_in.png");
     public static final int MAX_RENDER_Y = 1024;
 
     private static final Vector3f YP = new Vector3f(0,1,0);
 
     private static final float PiSin = (float) Math.sin((Math.PI / 4D));
+    private final BlockEntityRendererProvider.Context context;
 
-    public CustomBeaconRender(BlockEntityRendererProvider.Context p_173529_) {
+    public CustomBeaconRender(BlockEntityRendererProvider.Context context) {
+        this.context = context;
     }
 
     @Override
-    public void render(BeaconBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLightIn, int overlayIn) {
+    public void render(BeaconBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack, @NotNull MultiBufferSource multiBufferSource, int combinedLightIn, int overlayIn) {
         long i = blockEntity.getLevel().getGameTime();
 
         renderNetherStar(poseStack, multiBufferSource, 4, i, partialTicks); //Render the star inside
@@ -72,7 +76,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
                 }
             }
         }
-        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, i, 0, 0, new float[]{0, 0, 0}, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
+        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, i, 0, 0, new float[]{0, 0, 0}, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5, context);
         for (ResourceLocation activeEffect : activeEffects) {
             BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(activeEffect);
             effect.customRenderStep(settings);
@@ -88,7 +92,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         }
     }
 
-    public static void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, int color, List<ResourceLocation> activeEffects) {
+    public void renderBeaconBeam(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, int color, List<ResourceLocation> activeEffects) {
 
         poseStack.pushPose();
 
@@ -97,7 +101,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         BeaconEffect renderer = null;
 
         float[] c = {((color>>16)&0xFF)/256f, ((color>>8)&0xFF)/256f, (color&0xFF)/256f};
-        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, time, baseHeight, height, c, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5);
+        BeaconRenderSettings settings = new BeaconRenderSettings(blockEntity, poseStack, multiBufferSource, partialTicks, time, baseHeight, height, c, ResourceLocation.fromNamespaceAndPath(BEAM_LOCATION.getNamespace(), BEAM_LOCATION.getPath()), 0.125F, 5, context);
 
         for (ResourceLocation activeEffect : activeEffects) {
             BeaconEffect effect = BeaconEffectRegistry.getRegistry().get(activeEffect);
@@ -113,7 +117,7 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
             for (int i=0; i<settings.beams; i++) {
                 float s = i*4+4;
                 float s1 = s/2;
-                RenderUtils.renderTubeVortex(poseStack.last(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, (settings.height + settings.baseHeight)*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, settings.time/5F, 1, height+(settings.time/5F));
+                RenderUtils.renderTubeVortex(poseStack.last(), multiBufferSource.getBuffer(settings.renderType), new Vector3f(-s1, settings.baseHeight*16, -s1), new Vector3f(s1, (settings.height + settings.baseHeight)*16, s1), settings.color[0], settings.color[1], settings.color[2], settings.alpha, 0, /*settings.time/5F*/ 1, 1, height/*+(settings.time/5F)*/);
             }
         }
 
@@ -143,14 +147,17 @@ public class CustomBeaconRender implements BlockEntityRenderer<BeaconBlockEntity
         poseStack.translate(0.0D, 1.5F + f2 / 2.0F, 0.0D);
         poseStack.mulPose(Axis.YP.rotationDegrees(f1));
         poseStack.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
+//        RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(BetterBeaconRenderTypes.borderParallax(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         poseStack.scale(0.875F, 0.875F, 0.875F);
         poseStack.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
         poseStack.mulPose(Axis.YP.rotationDegrees(f1));
+//        RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(BetterBeaconRenderTypes.borderParallax(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_OUT)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         poseStack.scale(0.875F, 0.875F, 0.875F);
         poseStack.mulPose((new Quaternionf()).setAngleAxis(1.0471976F, PiSin, 0.0F, PiSin));
         poseStack.mulPose(Axis.YP.rotationDegrees(f1));
+//        RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(BetterBeaconRenderTypes.borderParallax(TEXTURE_IN)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         RenderUtils.renderPart(poseStack.last(), bufferIn.getBuffer(RenderType.entitySmoothCutout(TEXTURE_IN)), new Vector3f(-radius,-radius,-radius), new Vector3f(radius,radius,radius), red, green, blue, alpha);
         poseStack.popPose();
     }

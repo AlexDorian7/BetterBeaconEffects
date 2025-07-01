@@ -3,6 +3,7 @@ package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 
@@ -19,8 +20,9 @@ public class BeaconRenderSettings {
     public float alpha;
     public int beams;
     public RenderType renderType;
+    public final BlockEntityRendererProvider.Context context;
 
-    public BeaconRenderSettings(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, ResourceLocation texture, float alpha, int beams) {
+    public BeaconRenderSettings(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, ResourceLocation texture, float alpha, int beams, BlockEntityRendererProvider.Context context) {
         this.blockEntity = blockEntity;
         this.poseStack = poseStack;
         this.multiBufferSource = multiBufferSource;
@@ -32,7 +34,8 @@ public class BeaconRenderSettings {
         this.texture = texture;
         this.alpha = alpha;
         this.beams = beams;
-        this.renderType = BetterBeaconRenderTypes.getInstance().BEACON_BEAM_TRANSLUCENT.apply(this.texture);
+        this.context = context;
+        this.renderType = RenderType.beaconBeam(this.texture, true);
     }
 
     /**

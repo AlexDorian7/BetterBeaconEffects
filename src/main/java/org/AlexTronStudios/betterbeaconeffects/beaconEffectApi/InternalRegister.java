@@ -36,6 +36,10 @@ public class InternalRegister {
         register("negate_effect", NegateEffect::new);
         register("colored_magic_effect", ColoredMagicEffect::new);
         register("air_effect", AirEffect::new);
+        register("fire_effect", FireEffect::new);
+        register("parallax_effect", ParallaxEffect::new);
+        register("water_effect", WaterEffect::new);
+        register("earth_effect", EarthEffect::new);
 
         registered = true;
     }

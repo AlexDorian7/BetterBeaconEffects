@@ -16,11 +16,10 @@ import org.joml.Vector3f;
 
 public class AirEffect implements BeaconEffect {
 
-    private static final float BASE_RADIUS = 0.5f;
+    private static final float BASE_RADIUS = 0.125f;
     private static final float ANGLE = Mth.PI / 8f;
 
-    private static final float TAN = Mth.sin(ANGLE) / Mth.cos(ANGLE);
-    private static final float WIDTH = TAN / CustomBeaconRender.MAX_RENDER_Y + BASE_RADIUS;
+    private static final float WIDTH = Mth.sin(ANGLE) / Mth.cos(ANGLE); // Tan
 
     @Override
     public String getName() {
@@ -65,6 +64,8 @@ public class AirEffect implements BeaconEffect {
     public void customRenderer(BeaconRenderSettings settings) {
 
         float height = settings.baseHeight + settings.height;
-        RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.getInstance().beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.time + settings.partialTicks) / 10f, 0);
+        for (int i=0; i<settings.beams; i++) {
+            RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH + BASE_RADIUS*i, height * WIDTH + BASE_RADIUS*i, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], 1, (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+        }
     }
 }
