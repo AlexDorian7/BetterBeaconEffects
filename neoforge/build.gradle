@@ -3,71 +3,41 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
-dependencies {
-    implementation("curse.maven:jei-238222:7420587")
-}
-
 neoForge {
-    def currentModId = providers.gradleProperty('mod_id').get()
-    def currentProjectPath = project.path
-
-    def clientRunDirectory = layout.projectDirectory.dir('runs/client')
-    def dataRunDirectory = layout.projectDirectory.dir('runs/data')
-    def serverRunDirectory = layout.projectDirectory.dir('runs/server')
-
     version = neoforge_version
-
-    def at = project(':common')
-            .file('src/main/resources/META-INF/accesstransformer.cfg')
-
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-
-    parchment {
-        minecraftVersion = "${minecraft_version}"
-        mappingsVersion = "${parchment_version}"
-    }
-
     runs {
         configureEach {
-            systemProperty(
-                    'neoforge.enabledGameTestNamespaces',
-                    currentModId
-            )
-            ideName.set("NeoForge ${name.capitalize()} (${currentProjectPath})")
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
         }
-
         client {
             client()
-            gameDirectory.set(clientRunDirectory)
+            gameDirectory = this.mkdir(this.file('runs/client'))
         }
-
         data {
-            data()
-            gameDirectory.set(dataRunDirectory)
-
-            programArguments.addAll(
-                    '--mod', currentModId,
-                    '--all',
-                    '--output', file('src/generated/resources').absolutePath,
-                    '--existing', file('src/main/resources').absolutePath
-            )
+            clientData()
+            gameDirectory = this.mkdir(this.file('runs/data'))
+            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
-
         server {
             server()
-            gameDirectory.set(serverRunDirectory)
+            this.file('runs/server').createParentDirectories()
+            gameDirectory = this.mkdir(this.file('runs/server'))
         }
     }
-
     mods {
-        "${currentModId}" {
+        "${mod_id}" {
             sourceSet sourceSets.main
         }
     }
 }
-
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 

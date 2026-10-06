@@ -1,12 +1,6 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -15,7 +9,6 @@ import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
 import org.alextronstudios.betterbeaconeffects.utils.RenderUtils;
-import org.joml.Vector3f;
 
 public class FireEffect implements BeaconEffect {
 
@@ -32,17 +25,17 @@ public class FireEffect implements BeaconEffect {
 
     @Override
     public Block getBlock() {
-        return Blocks.ORANGE_WOOL;
+        return Blocks.WOOL.orange();
     }
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255, 127, 0);
+        return 0xFF7F00;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        //beaconRenderSettings.texture = ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl_white.png");
+//        beaconRenderSettings.texture = Identifier.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl_white.png");
         return beaconRenderSettings;
     }
 
@@ -61,7 +54,7 @@ public class FireEffect implements BeaconEffect {
         settings.poseStack.pushPose();
         settings.poseStack.translate(-radius/16f, 0, -radius/16f);
         settings.poseStack.scale(1 + radius/8f, 1 + radius/8f, 1 + radius/8f);
-        settings.context.getBlockRenderDispatcher().renderSingleBlock(Blocks.FIRE.defaultBlockState(), settings.poseStack, settings.multiBufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+//        settings.context.getBlockRenderDispatcher().renderSingleBlock(Blocks.FIRE.defaultBlockState(), settings.poseStack, settings.submitNodeCollector, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         settings.poseStack.popPose();
     }
 
@@ -69,6 +62,8 @@ public class FireEffect implements BeaconEffect {
     public void customRenderer(BeaconRenderSettings settings) {
 
         float height = settings.baseHeight + settings.height;
-        RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+        settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
+            RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.beaconRenderState.animationTime) / 10f, -(settings.beaconRenderState.animationTime) / 10f);
+        });
     }
 }

@@ -2,7 +2,6 @@ package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -31,12 +30,12 @@ public class WaterEffect implements BeaconEffect {
 
     @Override
     public Block getBlock() {
-        return Blocks.BLUE_WOOL;
+        return Blocks.WOOL.blue();
     }
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(0, 0, 255);
+        return 0x0000FF;
     }
 
     @Override
@@ -58,11 +57,11 @@ public class WaterEffect implements BeaconEffect {
 
     private static void renderWater(BeaconRenderSettings settings) {
         if (RANDOM.nextInt(4) == 0) {
-            BlockPos pos = settings.blockEntity.getBlockPos();
+            BlockPos pos = settings.beaconRenderState.blockPos;
             float x = RANDOM.nextFloat()*7+pos.getX()-3;
             float y = RANDOM.nextFloat()*7+pos.getY()-3;
             float z = RANDOM.nextFloat()*7+pos.getZ()-3;
-            settings.blockEntity.getLevel().addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
+            settings.beaconRenderState.blockEntity.getLevel().addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
         }
     }
 
@@ -70,6 +69,8 @@ public class WaterEffect implements BeaconEffect {
     public void customRenderer(BeaconRenderSettings settings) {
 
         float height = settings.baseHeight + settings.height;
-        RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+        settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
+            RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.beaconRenderState.animationTime) / 10f, -(settings.beaconRenderState.animationTime) / 10f);
+        });
     }
 }

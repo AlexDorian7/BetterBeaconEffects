@@ -7,9 +7,9 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-common/0.5.3/13ad40ee435e671fec18e3f0d6afec8c874b08b5/mixinextras-common-0.5.3.jar" />
         </processorPath>
-        <module name="BetterBeaconEffects.common.main" />
+        <module name="MultiLoader-Template.common.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="25" />
   </component>
 </project>

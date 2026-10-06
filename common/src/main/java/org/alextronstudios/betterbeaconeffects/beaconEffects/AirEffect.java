@@ -1,13 +1,11 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import org.alextronstudios.betterbeaconeffects.CustomBeaconRender;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
@@ -28,17 +26,17 @@ public class AirEffect implements BeaconEffect {
 
     @Override
     public Block getBlock() {
-        return Blocks.WHITE_WOOL;
+        return Blocks.WOOL.white();
     }
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255, 255, 255);
+        return 0xFFFFFF;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        beaconRenderSettings.texture = ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl_white.png");
+        beaconRenderSettings.texture = Identifier.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl_white.png");
         return beaconRenderSettings;
     }
 
@@ -54,10 +52,11 @@ public class AirEffect implements BeaconEffect {
     }
 
     private static void renderWind(BeaconRenderSettings settings, float speed, float radius) {
-        VertexConsumer vertexConsumer =  settings.multiBufferSource.getBuffer(RenderType.energySwirl(
-                ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl.png"),
-                (settings.time + settings.partialTicks) / speed, 0));
-        RenderUtils.renderTubeVortex(settings.poseStack.last(), vertexConsumer, new Vector3f(-radius, 0, -radius), new Vector3f(16+radius, 16+radius*2, 16+radius), 1, 1, 1, 1);
+        settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, RenderTypes.energySwirl(
+                Identifier.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl.png"),
+                (settings.time + settings.partialTicks) / speed, 0), (pose, vertexConsumer) -> {
+            RenderUtils.renderTubeVortex(pose, vertexConsumer, new Vector3f(-radius, 0, -radius), new Vector3f(16+radius, 16+radius*2, 16+radius), 1, 1, 1, 1);
+        });
     }
 
     @Override
@@ -65,7 +64,10 @@ public class AirEffect implements BeaconEffect {
 
         float height = settings.baseHeight + settings.height;
         for (int i=0; i<settings.beams; i++) {
-            RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH + BASE_RADIUS*i, height * WIDTH + BASE_RADIUS*i, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], 1, (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+            int finalI = i;
+            settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
+                RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH + BASE_RADIUS* finalI, height * WIDTH + BASE_RADIUS* finalI, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], 1, (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+            });
         }
     }
 }

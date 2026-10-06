@@ -1,15 +1,12 @@
 package org.alextronstudios.betterbeaconeffects;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BetterBeaconRenderTypes;
 
 import java.io.IOException;

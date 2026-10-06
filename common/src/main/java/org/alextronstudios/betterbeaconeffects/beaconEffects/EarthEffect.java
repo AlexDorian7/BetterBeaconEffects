@@ -56,7 +56,7 @@ public class EarthEffect implements BeaconEffect {
         settings.poseStack.pushPose();
         settings.poseStack.translate(-radius/16f, -radius/16f, -radius/16f);
         settings.poseStack.scale(1 + radius/8f, 1 + radius/8f, 1 + radius/8f);
-        settings.context.getBlockRenderDispatcher().renderSingleBlock(Blocks.DIRT.defaultBlockState(), settings.poseStack, settings.multiBufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+//        settings.context.blockEntityRenderDispatcher().renderSingleBlock(Blocks.DIRT.defaultBlockState(), settings.poseStack, settings.submitNodeCollector, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         settings.poseStack.popPose();
     }
 
@@ -64,6 +64,9 @@ public class EarthEffect implements BeaconEffect {
     public void customRenderer(BeaconRenderSettings settings) {
 
         float height = settings.baseHeight + settings.height;
-        RenderUtils.renderTubePolyTrap(settings.poseStack.last(), settings.multiBufferSource.getBuffer(BetterBeaconRenderTypes.beaconBeamCutout(settings.texture)), 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+        settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
+            RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.time + settings.partialTicks) / 10f, -(settings.time + settings.partialTicks) / 10f);
+
+        });
     }
 }

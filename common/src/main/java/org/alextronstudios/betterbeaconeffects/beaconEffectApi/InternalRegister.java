@@ -1,6 +1,6 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.alextronstudios.betterbeaconeffects.beaconEffects.*;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -45,6 +45,6 @@ public class InternalRegister {
     }
 
     private static void register(String name, Supplier<BeaconEffect> effect) {
-        BeaconEffectRegistry.register(ResourceLocation.fromNamespaceAndPath("betterbeaconeffects", name), effect);
+        BeaconEffectRegistry.register(Identifier.fromNamespaceAndPath("betterbeaconeffects", name), effect);
     }
 }

@@ -1,15 +1,9 @@
 package org.alextronstudios.betterbeaconeffects.platform.services;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Function;
-
-import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public interface IPlatformHelper {
 
@@ -44,9 +38,9 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
-
+    
     RenderType getColoredPortal();
-    Function<ResourceLocation, RenderType> getBeaconBeamTranslucent();
-    Function<ResourceLocation, RenderType> getBeaconBeamCutout();
-    Function<ResourceLocation, RenderType> getBorderParallax();
+    Function<Identifier, RenderType> getBeaconBeamTranslucent();
+    Function<Identifier, RenderType> getBeaconBeamCutout();
+    Function<Identifier, RenderType> getBorderParallax();
 }

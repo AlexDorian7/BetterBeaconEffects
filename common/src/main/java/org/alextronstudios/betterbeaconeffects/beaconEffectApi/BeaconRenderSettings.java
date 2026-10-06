@@ -1,33 +1,30 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffectApi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BeaconBlockEntity;
+import org.alextronstudios.betterbeaconeffects.CustomBeaconRenderState;
 
 public class BeaconRenderSettings {
-    public BeaconBlockEntity blockEntity;
     public PoseStack poseStack;
-    public MultiBufferSource multiBufferSource;
-    public float partialTicks;
-    public long time;
+    public SubmitNodeCollector submitNodeCollector;
     public int height;
     public int baseHeight;
     public float[] color;
-    public ResourceLocation texture;
+    public Identifier texture;
     public float alpha;
     public int beams;
     public RenderType renderType;
     public final BlockEntityRendererProvider.Context context;
+    public CustomBeaconRenderState beaconRenderState;
 
-    public BeaconRenderSettings(BeaconBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, ResourceLocation texture, float alpha, int beams, BlockEntityRendererProvider.Context context) {
-        this.blockEntity = blockEntity;
+    public BeaconRenderSettings(PoseStack poseStack, SubmitNodeCollector multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, Identifier texture, float alpha, int beams, BlockEntityRendererProvider.Context context, CustomBeaconRenderState beaconRenderState) {
         this.poseStack = poseStack;
-        this.multiBufferSource = multiBufferSource;
-        this.partialTicks = partialTicks;
-        this.time = time;
+        this.submitNodeCollector = multiBufferSource;
         this.height = height;
         this.baseHeight = baseHeight;
         this.color = color;
@@ -35,13 +32,14 @@ public class BeaconRenderSettings {
         this.alpha = alpha;
         this.beams = beams;
         this.context = context;
-        this.renderType = RenderType.beaconBeam(this.texture, true);
+        this.renderType = RenderTypes.beaconBeam(this.texture, true);
+        this.beaconRenderState = beaconRenderState;
     }
 
     /**
      * This should be done after the texture resource location is changed and a custom RenderType is not being used
      */
     public void recalculateRenderType() {
-        this.renderType = RenderType.beaconBeam(this.texture, true);
+        this.renderType = RenderTypes.beaconBeam(this.texture, true);
     }
 }
