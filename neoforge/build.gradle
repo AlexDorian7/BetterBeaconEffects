@@ -1,0 +1,91 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+}
+
+dependencies {
+    implementation("curse.maven:jei-238222:7420587")
+}
+
+neoForge {
+    def currentModId = providers.gradleProperty('mod_id').get()
+    def currentProjectPath = project.path
+
+    def clientRunDirectory = layout.projectDirectory.dir('runs/client')
+    def dataRunDirectory = layout.projectDirectory.dir('runs/data')
+    def serverRunDirectory = layout.projectDirectory.dir('runs/server')
+
+    version = neoforge_version
+
+    def at = project(':common')
+            .file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+
+    parchment {
+        minecraftVersion = "${minecraft_version}"
+        mappingsVersion = "${parchment_version}"
+    }
+
+    runs {
+        configureEach {
+            systemProperty(
+                    'neoforge.enabledGameTestNamespaces',
+                    currentModId
+            )
+            ideName.set("NeoForge ${name.capitalize()} (${currentProjectPath})")
+        }
+
+        client {
+            client()
+            gameDirectory.set(clientRunDirectory)
+        }
+
+        data {
+            data()
+            gameDirectory.set(dataRunDirectory)
+
+            programArguments.addAll(
+                    '--mod', currentModId,
+                    '--all',
+                    '--output', file('src/generated/resources').absolutePath,
+                    '--existing', file('src/main/resources').absolutePath
+            )
+        }
+
+        server {
+            server()
+            gameDirectory.set(serverRunDirectory)
+        }
+    }
+
+    mods {
+        "${currentModId}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named(variant) {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+        configurations.named(variant) {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
+    }
+}

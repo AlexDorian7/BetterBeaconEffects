@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BetterBeaconEffects.main.iml" filepath="$PROJECT_DIR$/.idea/modules/BetterBeaconEffects.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BetterBeaconEffects.test.iml" filepath="$PROJECT_DIR$/.idea/modules/BetterBeaconEffects.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.alextronstudios.betterbeaconeffects.BetterBeaconEffects.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.alextronstudios.betterbeaconeffects.BetterBeaconEffects.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/BetterBeaconEffects.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/BetterBeaconEffects.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/BetterBeaconEffects.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/BetterBeaconEffects.fabric.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/BetterBeaconEffects.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/BetterBeaconEffects.fabric.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/BetterBeaconEffects.neoforge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/BetterBeaconEffects.neoforge.main.iml" />
     </modules>
   </component>
 </project>
