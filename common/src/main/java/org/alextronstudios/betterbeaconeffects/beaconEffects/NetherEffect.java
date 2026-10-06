@@ -2,7 +2,6 @@ package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,12 +28,12 @@ public class NetherEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255,127,0);
+        return 0xFF7F00;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        float f = beaconRenderSettings.time + beaconRenderSettings.partialTicks;
+        float f = beaconRenderSettings.beaconRenderState.animationTime;
         f=(f/100) % 1;
         float s = 0.5F*(Mth.sin((float) (2*Math.PI*f))) + 0.5F;
         float s2 = s/2;
@@ -50,14 +49,14 @@ public class NetherEffect implements BeaconEffect {
     @Override
     public void customRenderStep(BeaconRenderSettings settings) {
         if (RANDOM.nextInt(16) == 0) {
-            BlockPos pos = settings.blockEntity.getBlockPos();
+            BlockPos pos = settings.beaconRenderState.blockEntity.getBlockPos();
             float x = RANDOM.nextFloat()*3+pos.getX()-1;
             float y = RANDOM.nextFloat()*3+pos.getY()-1;
             float z = RANDOM.nextFloat()*3+pos.getZ()-1;
             if (RANDOM.nextBoolean()) {
-                settings.blockEntity.getLevel().addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
+                settings.beaconRenderState.blockEntity.getLevel().addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
             } else {
-                settings.blockEntity.getLevel().addParticle(ParticleTypes.LAVA, x, y, z, 0, 0, 0);
+                settings.beaconRenderState.blockEntity.getLevel().addParticle(ParticleTypes.LAVA, x, y, z, 0, 0, 0);
             }
         }
     }

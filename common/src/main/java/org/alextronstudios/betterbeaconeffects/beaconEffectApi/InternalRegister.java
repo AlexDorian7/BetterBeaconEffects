@@ -30,14 +30,12 @@ public class InternalRegister {
         register("moven_effect", MoveNEffect::new);
         register("magic_effect", MagicEffect::new);
         register("laser_effect", LaserEffect::new);
-        register("line_effect", LineEffect::new);
         register("color_fade_effect", ColorFadeEffect::new);
         register("nether_effect", NetherEffect::new);
         register("negate_effect", NegateEffect::new);
         register("colored_magic_effect", ColoredMagicEffect::new);
         register("air_effect", AirEffect::new);
         register("fire_effect", FireEffect::new);
-        register("parallax_effect", ParallaxEffect::new);
         register("water_effect", WaterEffect::new);
         register("earth_effect", EarthEffect::new);
 

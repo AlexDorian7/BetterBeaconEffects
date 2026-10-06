@@ -1,13 +1,17 @@
 package org.alextronstudios.betterbeaconeffects.utils;
 
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.object.crystal.EndCrystalModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.EndCrystalRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
+
+import static net.minecraft.util.LightCoordsUtil.FULL_BRIGHT;
 
 public class RenderUtils {
 
@@ -88,7 +92,7 @@ public class RenderUtils {
         }
     }
 
-    public static void renderLineCube(PoseStack.Pose pose, MultiBufferSource multiBufferSource, Vector3f start, Vector3f end, float r, float g, float b, float a) {
+    public static void renderLineCube(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Vector3f start, Vector3f end, float r, float g, float b, float a) {
         Vector3f ca = start;
         Vector3f cb = new Vector3f(start.x, start.y, end.z);
         Vector3f cc = new Vector3f(end.x, start.y, end.z);
@@ -98,41 +102,43 @@ public class RenderUtils {
         Vector3f cg = end;
         Vector3f ch = new Vector3f(end.x, end.y, start.z);
 
-        VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.lines());
-        renderLine(pose, vertexConsumer, ca, cb, r, g, b, a); // bottom
-        renderLine(pose, vertexConsumer, cb, cc, r, g, b, a);
-        renderLine(pose, vertexConsumer, cc, cd, r, g, b, a);
-        renderLine(pose, vertexConsumer, cd, ca, r, g, b, a);
+        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, vertexConsumer) -> {
+            renderLine(pose, vertexConsumer, ca, cb, r, g, b, a); // bottom
+            renderLine(pose, vertexConsumer, cb, cc, r, g, b, a);
+            renderLine(pose, vertexConsumer, cc, cd, r, g, b, a);
+            renderLine(pose, vertexConsumer, cd, ca, r, g, b, a);
 
-        renderLine(pose, vertexConsumer, ce, cf, r, g, b, a); // top
-        renderLine(pose, vertexConsumer, cf, cg, r, g, b, a);
-        renderLine(pose, vertexConsumer, cg, ch, r, g, b, a);
-        renderLine(pose, vertexConsumer, ch, ce, r, g, b, a);
+            renderLine(pose, vertexConsumer, ce, cf, r, g, b, a); // top
+            renderLine(pose, vertexConsumer, cf, cg, r, g, b, a);
+            renderLine(pose, vertexConsumer, cg, ch, r, g, b, a);
+            renderLine(pose, vertexConsumer, ch, ce, r, g, b, a);
 
-        renderLine(pose, vertexConsumer, ca, ce, r, g, b, a); // sides
-        renderLine(pose, vertexConsumer, cb, cf, r, g, b, a);
-        renderLine(pose, vertexConsumer, cc, cg, r, g, b, a);
-        renderLine(pose, vertexConsumer, cd, ch, r, g, b, a);
+            renderLine(pose, vertexConsumer, ca, ce, r, g, b, a); // sides
+            renderLine(pose, vertexConsumer, cb, cf, r, g, b, a);
+            renderLine(pose, vertexConsumer, cc, cg, r, g, b, a);
+            renderLine(pose, vertexConsumer, cd, ch, r, g, b, a);
+        });
+
     }
 
     private static void renderLine(PoseStack.Pose pose, VertexConsumer vertexConsumer, Vector3f start, Vector3f end, float r, float g, float b, float a) {
         float endX = end.x - start.x;
         float endY = end.y - start.y;
         float endZ = end.z - start.z;
-        vertexConsumer.addVertex(pose, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(pose, endX, endY, endZ);
-        vertexConsumer.addVertex(pose, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(pose, -endX, -endY, -endZ);
+        vertexConsumer.addVertex(pose, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(pose, endX, endY, endZ).setLineWidth(2);
+        vertexConsumer.addVertex(pose, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(pose, -endX, -endY, -endZ).setLineWidth(2);
     }
 
-    public static void renderLine(PoseStack poseStack, MultiBufferSource multiBufferSource, Vector3f start, Vector3f end, float r, float g, float b, float a) {
-        VertexConsumer bufferIn = multiBufferSource.getBuffer(RenderType.lines());
-        Matrix4f stackIn = poseStack.last().pose();
+    public static void renderLine(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Vector3f start, Vector3f end, float r, float g, float b, float a) {
 
-        float endX = end.x - start.x;
-        float endY = end.y - start.y;
-        float endZ = end.z - start.z;
+        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, vertexConsumer) -> {
+            float endX = end.x - start.x;
+            float endY = end.y - start.y;
+            float endZ = end.z - start.z;
 
-        bufferIn.addVertex(stackIn, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), endX, endY, endZ);
-        bufferIn.addVertex(stackIn, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), -endX,-endY,-endZ);
+            vertexConsumer.addVertex(pose, start.x(), start.y(), start.z()).setColor(r,g,b,a).setNormal(poseStack.last(), endX, endY, endZ);
+            vertexConsumer.addVertex(pose, end.x(), end.y(), end.z()).setColor(r,g,b,a).setNormal(poseStack.last(), -endX,-endY,-endZ);
+        });
     }
 
     public static float convert(float in) {
@@ -147,14 +153,22 @@ public class RenderUtils {
     }
 
     public static void renderFace(PoseStack.Pose pose, VertexConsumer vertexConsumer, float startX, float endX, float startY, float endY, float z1, float z2, float z3, float z4, float r, float g, float b, float a, float u1, float v1, float u2, float v2, float nx, float ny, float nz) {
-        vertexConsumer.addVertex(pose, startX, startY, z1).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz); // Forward Face
-        vertexConsumer.addVertex(pose, endX, startY, z2)  .setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
-        vertexConsumer.addVertex(pose, endX, endY, z3)    .setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
-        vertexConsumer.addVertex(pose, startX, endY, z4)  .setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
+        vertexConsumer.addVertex(pose, startX, startY, z1).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz); // Forward Face
+        vertexConsumer.addVertex(pose, endX, startY, z2)  .setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
+        vertexConsumer.addVertex(pose, endX, endY, z3)    .setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
+        vertexConsumer.addVertex(pose, startX, endY, z4)  .setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
 
-        vertexConsumer.addVertex(pose, startX, startY, z1).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, nx, ny, nz); // Backward Face
-        vertexConsumer.addVertex(pose, startX, endY, z4)  .setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, nx, ny, nz);
-        vertexConsumer.addVertex(pose, endX, endY, z3)    .setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, nx, ny, nz);
-        vertexConsumer.addVertex(pose, endX, startY, z2)  .setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(pose, nx, ny, nz);
+        vertexConsumer.addVertex(pose, startX, startY, z1).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, nx, ny, nz); // Backward Face
+        vertexConsumer.addVertex(pose, startX, endY, z4)  .setColor(r, g, b, a).setUv(u1,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, nx, ny, nz);
+        vertexConsumer.addVertex(pose, endX, endY, z3)    .setColor(r, g, b, a).setUv(u2,v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, nx, ny, nz);
+        vertexConsumer.addVertex(pose, endX, startY, z2)  .setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, nx, ny, nz);
+    }
+
+    public static void renderNetherStar(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, EndCrystalRenderState state, EndCrystalModel model, Identifier texture) {
+        poseStack.pushPose();
+        poseStack.scale(2.0F, 2.0F, 2.0F);
+        poseStack.translate(0.0F, -0.5F, 0.0F);
+        submitNodeCollector.submitModel(model, state, poseStack, texture, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        poseStack.popPose();
     }
 }

@@ -1,21 +1,17 @@
-#version 150
+#version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <matrix.glsl>
-#moj_import <fog.glsl>
+#include <minecraft:fog.glsl>
+#include <minecraft:matrix.glsl>
+#include <minecraft:globals.glsl>
 
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
 
-uniform float GameTime;
-uniform int EndPortalLayers;
-uniform vec4 ColorModulator;
-uniform float FogStart;
-uniform float FogEnd;
-uniform vec4 FogColor;
-uniform mat4 ProjMat;
-
-in vec4 texProj0;
-in vec4 vertexColor;
+layout(location = 0) in vec4 texProj0;
+layout(location = 1) in float sphericalVertexDistance;
+layout(location = 2) in float cylindricalVertexDistance;
+layout(location = 3) in vec4 color;
 
 const mat4 SCALE_TRANSLATE = mat4(
     0.5, 0.0, 0.0, 0.25,
@@ -39,13 +35,12 @@ mat4 end_portal_layer(float layer) {
     return mat4(scale * rotate) * translate * SCALE_TRANSLATE;
 }
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 void main() {
-    vec3 color = textureProj(Sampler0, texProj0).rgb * vec3(0.022087, 0.098399, 0.110818);
-    for (int i = 0; i < EndPortalLayers; i++) {
-        color += textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb * vertexColor.rgb;
+    vec4 c = vec4(0,0,0,1); // textureProj(Sampler0, texProj0).rgb * COLORS[0];
+    for (int i = 0; i < PORTAL_LAYERS; i++) {
+        c += vec4(textureProj(Sampler1, texProj0 * end_portal_layer(float(i + 1))).rgb, 1) * color;
     }
-    float fragmentDistance = -ProjMat[3].z / ((gl_FragCoord.z) * -2.0 + 1.0 - ProjMat[2].z);
-    fragColor = linear_fog(vec4(color, 1.0), fragmentDistance, FogStart, FogEnd, FogColor);
+    fragColor = apply_fog(c, sphericalVertexDistance, cylindricalVertexDistance, FogEnvironmentalStart, FogEnvironmentalEnd, FogRenderDistanceStart, FogRenderDistanceEnd, FogColor);
 }

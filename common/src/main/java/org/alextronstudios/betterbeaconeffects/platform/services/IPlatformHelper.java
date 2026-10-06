@@ -1,5 +1,8 @@
 package org.alextronstudios.betterbeaconeffects.platform.services;
 
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.resources.Identifier;
 
@@ -38,9 +41,7 @@ public interface IPlatformHelper {
 
         return isDevelopmentEnvironment() ? "development" : "production";
     }
-    
-    RenderType getColoredPortal();
-    Function<Identifier, RenderType> getBeaconBeamTranslucent();
-    Function<Identifier, RenderType> getBeaconBeamCutout();
-    Function<Identifier, RenderType> getBorderParallax();
+
+    RenderPipeline register(RenderPipeline pipeline);
+    RenderType create(String name, RenderSetup state);
 }

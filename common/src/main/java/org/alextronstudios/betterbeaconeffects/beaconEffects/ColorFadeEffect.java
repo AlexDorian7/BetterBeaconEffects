@@ -1,6 +1,5 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -22,12 +21,12 @@ public class ColorFadeEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ABGR32.color(255, 255,0,127);
+        return 0xFF007F;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        float f = beaconRenderSettings.time + beaconRenderSettings.partialTicks;
+        float f = beaconRenderSettings.beaconRenderState.animationTime;
         f=(f/100) % 100;
         float s = 0.5F*(Mth.sin((float) (2*Math.PI*f))) + 0.5F;
         s /= 4;

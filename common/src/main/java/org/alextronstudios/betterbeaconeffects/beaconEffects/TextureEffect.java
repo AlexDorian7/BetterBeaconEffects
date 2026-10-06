@@ -1,7 +1,7 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
@@ -9,7 +9,6 @@ import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSetti
 
 public class TextureEffect implements BeaconEffect {
 
-    public static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/beacon_beam.png");
     @Override
     public String getName() {
         return "Texture Effect";
@@ -22,12 +21,12 @@ public class TextureEffect implements BeaconEffect {
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(127, 127, 127);
+        return 0x7F7F7F;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        beaconRenderSettings.texture = TEXTURE;
+        beaconRenderSettings.texture = BeaconRenderer.BEAM_LOCATION;
         beaconRenderSettings.recalculateRenderType();
         return beaconRenderSettings;
     }

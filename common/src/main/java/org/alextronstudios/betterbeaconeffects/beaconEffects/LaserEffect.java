@@ -1,11 +1,10 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import net.minecraft.util.FastColor;
+import com.mojang.math.Axis;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconEffect;
 import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
-import org.joml.Quaternionf;
 
 public class LaserEffect implements BeaconEffect {
     @Override
@@ -15,18 +14,18 @@ public class LaserEffect implements BeaconEffect {
 
     @Override
     public Block getBlock() {
-        return Blocks.WAXED_COPPER_BLOCK;
+        return Blocks.COPPER_BLOCK.waxed().unaffected();
     }
 
     @Override
     public int getColor() {
-        return FastColor.ARGB32.color(255, 191, 0);
+        return 0xFFBF00;
     }
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
         beaconRenderSettings.poseStack.translate(0,0.5F,0);
-        beaconRenderSettings.poseStack.mulPose(new Quaternionf().setAngleAxis((Math.PI/2), 1, 0, 0));
+        beaconRenderSettings.poseStack.rotateDegrees(Axis.XP, 90);
         beaconRenderSettings.poseStack.translate(0,-0.5F,0);
         return beaconRenderSettings;
     }

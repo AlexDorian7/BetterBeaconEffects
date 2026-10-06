@@ -22,7 +22,7 @@ public class BeaconRenderSettings {
     public final BlockEntityRendererProvider.Context context;
     public CustomBeaconRenderState beaconRenderState;
 
-    public BeaconRenderSettings(PoseStack poseStack, SubmitNodeCollector multiBufferSource, float partialTicks, long time, int baseHeight, int height, float[] color, Identifier texture, float alpha, int beams, BlockEntityRendererProvider.Context context, CustomBeaconRenderState beaconRenderState) {
+    public BeaconRenderSettings(PoseStack poseStack, SubmitNodeCollector multiBufferSource, int baseHeight, int height, float[] color, Identifier texture, float alpha, int beams, BlockEntityRendererProvider.Context context, CustomBeaconRenderState beaconRenderState) {
         this.poseStack = poseStack;
         this.submitNodeCollector = multiBufferSource;
         this.height = height;
