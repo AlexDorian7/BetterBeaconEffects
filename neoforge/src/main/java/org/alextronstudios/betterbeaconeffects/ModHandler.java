@@ -24,5 +24,6 @@ public class ModHandler {
 
     public void registerPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(BetterBeaconRenderTypes.COLORED_PORTAL_PIPELINE);
+        event.registerPipeline(BetterBeaconRenderTypes.SPACE_PIPELINE);
     }
 }

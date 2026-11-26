@@ -1,19 +1,43 @@
 package org.alextronstudios.betterbeaconeffects.utils;
 
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.object.crystal.EndCrystalModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.EndCrystalRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
+import org.alextronstudios.betterbeaconeffects.beaconEffectApi.BeaconRenderSettings;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import static net.minecraft.util.LightCoordsUtil.FULL_BRIGHT;
 
 public class RenderUtils {
+
+    public static void renderParticlePoint(PoseStack.Pose pose, VertexConsumer vertexConsumer, Vector3fc point, float r, float g, float b, float a) {
+        Vector3f start = new Vector3f(),end = new Vector3f(), p = new Vector3f();
+        point.mul(16, p);
+        p.sub(1,1,1, start);
+        p.add(1,1,1, end);
+        renderPart(pose, vertexConsumer, start, end, r, g, b, a); // center
+
+        for (Direction direction : Direction.values()) {
+            Vector3f s = new Vector3f(), e = new Vector3f();
+            Vector3f v = new Vector3f();
+            start.get(s);
+            end.get(e);
+            direction.getUnitVec3f().mul(2, v);
+            s.add(v);
+            e.add(v);
+            renderPart(pose, vertexConsumer, s, e, r, g, b, a/2);
+        }
+
+
+    }
 
     public static void renderPart(PoseStack.Pose pose, VertexConsumer bufferIn, Vector3f start, Vector3f end, float r, float g, float b, float a) {
         renderPart(pose, bufferIn, start, end, r, g, b, a, 0, 0, 1, 1);
@@ -145,13 +169,6 @@ public class RenderUtils {
         return in / 16F;
     }
 
-    public static float getY(long time, float partialTicks) {
-        float f = (float)time + partialTicks;
-        float f1 = (float) Math.sin(f * 0.2F) / 2.0F + 0.5F;
-        f1 = (f1 * f1 + f1) * 0.4F;
-        return f1 - 1.4F;
-    }
-
     public static void renderFace(PoseStack.Pose pose, VertexConsumer vertexConsumer, float startX, float endX, float startY, float endY, float z1, float z2, float z3, float z4, float r, float g, float b, float a, float u1, float v1, float u2, float v2, float nx, float ny, float nz) {
         vertexConsumer.addVertex(pose, startX, startY, z1).setColor(r, g, b, a).setUv(u1,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz); // Forward Face
         vertexConsumer.addVertex(pose, endX, startY, z2)  .setColor(r, g, b, a).setUv(u2,v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(FULL_BRIGHT).setNormal(pose, -nx, -ny, -nz);
@@ -170,5 +187,154 @@ public class RenderUtils {
         poseStack.translate(0.0F, -0.5F, 0.0F);
         submitNodeCollector.submitModel(model, state, poseStack, texture, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
+    }
+
+    public static void submitBeaconBeam(
+            BeaconRenderSettings settings,
+            float scale,
+            float animationTime,
+            int beamStart,
+            int height,
+            float beamGlowRadius,
+            boolean renderInnerFaces,
+            boolean renderOuterFaces
+    ) {
+        int beamEnd = beamStart + height;
+
+        float scroll = height < 0 ? animationTime : -animationTime;
+        float texVOff = Mth.frac(scroll * 0.2F - Mth.floor(scroll * 0.1F));
+
+        for (int i=1; i<=settings.beams; i++) {
+            float wnx = -beamGlowRadius*i;
+            float wnz = -beamGlowRadius*i;
+            float enx = beamGlowRadius*i;
+            float enz = -beamGlowRadius*i;
+            float wsx = -beamGlowRadius*i;
+            float wsz = beamGlowRadius*i;
+            float esx = beamGlowRadius*i;
+            float esz = beamGlowRadius*i;
+            float uu1 = 0.0F;
+            float uu2 = 1.0F;
+            float vv2 = -1.0F + texVOff;
+            float vv1 = height * scale + vv2;
+            int color = ARGB.colorFromFloat(settings.alpha, settings.color[0], settings.color[1], settings.color[2]);
+            settings.submitNodeCollector.submitCustomGeometry(
+                    settings.poseStack,
+                    settings.renderType,
+                    (pose, buffer) -> RenderUtils.renderBeamPart(pose, buffer, color, beamStart, beamEnd, wnx, wnz, enx, enz, wsx, wsz, esx, esz, 0.0F, 1.0F, vv1, vv2, renderInnerFaces, renderOuterFaces)
+            );
+        }
+    }
+
+    public static void submitBeaconBeam(
+            PoseStack.Pose pose,
+            VertexConsumer vertexConsumer,
+            float scale,
+            float animationTime,
+            int beamStart,
+            int height,
+            float beamGlowRadius,
+            int beams,
+            float red, float green, float blue, float alpha,
+            boolean renderInnerFaces,
+            boolean renderOuterFaces
+    ) {
+        int beamEnd = beamStart + height;
+
+        float scroll = height < 0 ? animationTime : -animationTime;
+        float texVOff = Mth.frac(scroll * 0.2F - Mth.floor(scroll * 0.1F));
+
+        for (int i=1; i<=beams; i++) {
+            float wnx = -beamGlowRadius*i;
+            float wnz = -beamGlowRadius*i;
+            float enx = beamGlowRadius*i;
+            float enz = -beamGlowRadius*i;
+            float wsx = -beamGlowRadius*i;
+            float wsz = beamGlowRadius*i;
+            float esx = beamGlowRadius*i;
+            float esz = beamGlowRadius*i;
+            float uu1 = 0.0F;
+            float uu2 = 1.0F;
+            float vv2 = -1.0F + texVOff;
+            float vv1 = height * scale + vv2;
+            int color = ARGB.colorFromFloat(alpha, red, green, blue);
+
+            RenderUtils.renderBeamPart(pose, vertexConsumer, color, beamStart, beamEnd, wnx, wnz, enx, enz, wsx, wsz, esx, esz, 0.0F, 1.0F, vv1, vv2, renderInnerFaces, renderOuterFaces);
+        }
+    }
+
+    public static void renderBeamPart(
+            PoseStack.Pose pose,
+            VertexConsumer builder,
+            int color,
+            int beamStart,
+            int beamEnd,
+            float wnx, float wnz,
+            float enx, float enz,
+            float wsx, float wsz,
+            float esx, float esz,
+            float uu1, float uu2,
+            float vv1, float vv2,
+            boolean renderInnerFaces,
+            boolean renderOuterFaces
+    ) {
+        // North (-Z)
+        renderQuad(pose, builder, color, beamStart, beamEnd,
+                wnx, wnz, enx, enz, uu1, uu2, vv1, vv2,
+                0.0F, 0.0F, -1.0F,
+                renderInnerFaces, renderOuterFaces);
+
+        // South (+Z)
+        renderQuad(pose, builder, color, beamStart, beamEnd,
+                esx, esz, wsx, wsz, uu1, uu2, vv1, vv2,
+                0.0F, 0.0F, 1.0F,
+                renderInnerFaces, renderOuterFaces);
+
+        // East (+X)
+        renderQuad(pose, builder, color, beamStart, beamEnd,
+                enx, enz, esx, esz, uu1, uu2, vv1, vv2,
+                1.0F, 0.0F, 0.0F,
+                renderInnerFaces, renderOuterFaces);
+
+        // West (-X)
+        renderQuad(pose, builder, color, beamStart, beamEnd,
+                wsx, wsz, wnx, wnz, uu1, uu2, vv1, vv2,
+                -1.0F, 0.0F, 0.0F,
+                renderInnerFaces, renderOuterFaces);
+    }
+
+    private static void renderQuad(
+            PoseStack.Pose pose,
+            VertexConsumer builder,
+            int color,
+            int beamStart,
+            int beamEnd,
+            float wnx, float wnz,
+            float enx, float enz,
+            float uu1, float uu2,
+            float vv1, float vv2,
+            float nx, float ny, float nz,
+            boolean renderInnerFaces,
+            boolean renderOuterFaces
+    ) {
+        if (renderInnerFaces) {
+            // Original winding, inward-facing normal.
+            addVertex(pose, builder, color, beamEnd,   wnx, wnz, uu2, vv1, -nx, -ny, -nz);
+            addVertex(pose, builder, color, beamStart, wnx, wnz, uu2, vv2, -nx, -ny, -nz);
+            addVertex(pose, builder, color, beamStart, enx, enz, uu1, vv2, -nx, -ny, -nz);
+            addVertex(pose, builder, color, beamEnd,   enx, enz, uu1, vv1, -nx, -ny, -nz);
+        }
+
+        if (renderOuterFaces) {
+            // Reversed winding, outward-facing normal.
+            addVertex(pose, builder, color, beamEnd,   enx, enz, uu1, vv1, nx, ny, nz);
+            addVertex(pose, builder, color, beamStart, enx, enz, uu1, vv2, nx, ny, nz);
+            addVertex(pose, builder, color, beamStart, wnx, wnz, uu2, vv2, nx, ny, nz);
+            addVertex(pose, builder, color, beamEnd,   wnx, wnz, uu2, vv1, nx, ny, nz);
+        }
+    }
+
+    private static void addVertex(PoseStack.Pose pose, VertexConsumer builder, int color, int y, float x, float z, float u, float v, float nx, float ny, float nz) {
+        builder.addVertex(pose, x, y, z).setColor(color).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(pose, nx, ny, nz);
     }
 }

@@ -37,10 +37,24 @@ public interface BeaconEffect {
     }
 
     /**
+     * Does this effect have a custom beam renderer that should be used per beam segment?
+     * @return boolean
+     */
+    default boolean hasCustomBeamRender() {
+        return false;
+    }
+
+    /**
      * The custom renderer to be used if hasCustomRender is true
      * @param settings The settings object
      */
     default void customRenderer(BeaconRenderSettings settings) {}
+
+    /**
+     * The custom renderer to be used if hasCustomBeamRender is true
+     * @param settings The settings object
+     */
+    default void customBeamRenderer(BeaconRenderSettings settings, int sectionIndex) {}
 
     /**
      * This is called once each frame to do additional rendering

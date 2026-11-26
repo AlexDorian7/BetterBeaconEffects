@@ -57,11 +57,11 @@ public class WaterEffect implements BeaconEffect {
 
     private static void renderWater(BeaconRenderSettings settings) {
         if (RANDOM.nextInt(4) == 0) {
-            BlockPos pos = settings.beaconRenderState.blockPos;
+            BlockPos pos = settings.state.blockPos;
             float x = RANDOM.nextFloat()*7+pos.getX()-3;
             float y = RANDOM.nextFloat()*7+pos.getY()-3;
             float z = RANDOM.nextFloat()*7+pos.getZ()-3;
-            settings.beaconRenderState.blockEntity.getLevel().addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
+            settings.state.blockEntity.getLevel().addParticle(ParticleTypes.DRIPPING_WATER, x, y, z, 0, 0, 0);
         }
     }
 
@@ -70,7 +70,7 @@ public class WaterEffect implements BeaconEffect {
 
         float height = settings.baseHeight + settings.height;
         settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
-            RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.beaconRenderState.animationTime) / 10f, -(settings.beaconRenderState.animationTime) / 10f);
+            RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH, height * WIDTH, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], settings.color[2], (settings.state.animationTime) / 10f, -(settings.state.animationTime) / 10f);
         });
     }
 }

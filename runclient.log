@@ -1,0 +1,176 @@
+Initialized native services in: C:\Users\alexd\.gradle\native
+Initialized jansi services in: C:\Users\alexd\.gradle\native
+The current JVM process isn't compatible with build requirement. The maximum heap size is insufficient.
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Starting process 'Gradle build daemon'. Working directory: C:\Users\alexd\.gradle\daemon\9.7.1 Command: C:\Program Files\Java\jdk-25.0.4\bin\java.exe --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xmx3G -Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant -cp C:\Users\alexd\.gradle\wrapper\dists\gradle-9.7.1-bin\1w1c7tv4s851m17nbqdsro2tv\gradle-9.7.1\lib\gradle-daemon-main-9.7.1.jar -javaagent:C:\Users\alexd\.gradle\wrapper\dists\gradle-9.7.1-bin\1w1c7tv4s851m17nbqdsro2tv\gradle-9.7.1\lib\agents\gradle-instrumentation-agent-9.7.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.7.1
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 0.794 secs.
+The client will now receive all logging from the daemon (pid: 41308). The daemon log file: C:\Users\alexd\.gradle\daemon\9.7.1\daemon-41308.out.log
+Daemon will be stopped at the end of the build 
+Using 20 worker leases.
+Operational build model parameters: {cachingModelBuilding=false, configurationCache=false, configurationCacheDisabledReason=null, configurationCacheParallelLoad=false, configurationCacheParallelStore=false, configureOnDemand=false, invalidateCoupledProjects=false, isolatedProjects=false, isolatedProjectsDiagnostics=false, isolatedProjectsDangerouslyIgnoreProblems=false, modelAsProjectDependency=false, modelBuilding=false, parallelModelBuilding=false, parallelProjectConfiguration=false, parallelProjectExecution=false, vintage=true}
+Received JVM installation metadata from 'C:\Program Files\Java\jdk-25.0.4': {JAVA_HOME=C:\Program Files\Java\jdk-25.0.4, JAVA_VERSION=25.0.4, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=25.0.4+7-LTS-189, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=25.0.4+7-LTS-189, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Watching the file system is configured to be enabled if available
+Now considering [D:\FORGE_MODDING\BetterBeaconEffects] as hierarchies to watch
+File system watching is active
+Starting Build
+Resolved plugin [id: 'org.gradle.toolchains.foojay-resolver-convention', version: '1.0.0']
+Settings evaluated using settings file 'D:\FORGE_MODDING\BetterBeaconEffects\settings.gradle'.
+Now considering [D:\FORGE_MODDING\BetterBeaconEffects\build-logic, D:\FORGE_MODDING\BetterBeaconEffects] as hierarchies to watch
+Projects loaded. Root project using build file 'D:\FORGE_MODDING\BetterBeaconEffects\build.gradle'.
+Included projects: [root project 'MultiLoader-Template', project ':common', project ':fabric', project ':neoforge']
+
+> Configure project :build-logic
+Evaluating project ':build-logic' using build file 'D:\FORGE_MODDING\BetterBeaconEffects\build-logic\build.gradle'.
+Resolved plugin [id: 'groovy-gradle-plugin']
+file or directory 'D:\FORGE_MODDING\BetterBeaconEffects\build-logic\src\main\resources', not found
+file or directory 'D:\FORGE_MODDING\BetterBeaconEffects\build-logic\src\main\java', not found
+Registering project ':build-logic' in composite build. Will substitute for module ':build-logic'.
+
+> Configure project :
+Evaluating root project 'MultiLoader-Template' using build file 'D:\FORGE_MODDING\BetterBeaconEffects\build.gradle'.
+Resolved plugin [id: 'net.fabricmc.fabric-loom', version: '1.18.1', apply: false]
+Resolved plugin [id: 'net.neoforged.moddev', version: '2.0.147', apply: false]
+Resolve mutations for :build-logic:extractPluginRequests (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:extractPluginRequests (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:extractPluginRequests UP-TO-DATE
+Caching disabled for task ':build-logic:extractPluginRequests' because:
+  Build cache is disabled
+Skipping task ':build-logic:extractPluginRequests' as it is up-to-date.
+Resolve mutations for :build-logic:generatePluginAdapters (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:generatePluginAdapters (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:generatePluginAdapters UP-TO-DATE
+Caching disabled for task ':build-logic:generatePluginAdapters' because:
+  Build cache is disabled
+Skipping task ':build-logic:generatePluginAdapters' as it is up-to-date.
+Resolve mutations for :build-logic:compileJava (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:compileJava (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:compileJava UP-TO-DATE
+Caching disabled for task ':build-logic:compileJava' because:
+  Build cache is disabled
+Skipping task ':build-logic:compileJava' as it is up-to-date.
+Resolve mutations for :build-logic:compileGroovy (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:compileGroovy (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:compileGroovy NO-SOURCE
+Skipping task ':build-logic:compileGroovy' as it has no source files and no previous output files.
+Resolve mutations for :build-logic:compileGroovyPlugins (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:compileGroovyPlugins (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:compileGroovyPlugins UP-TO-DATE
+Caching disabled for task ':build-logic:compileGroovyPlugins' because:
+  Build cache is disabled
+Skipping task ':build-logic:compileGroovyPlugins' as it is up-to-date.
+Resolve mutations for :build-logic:pluginDescriptors (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:pluginDescriptors (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+Caching disabled for task ':build-logic:pluginDescriptors' because:
+  Build cache is disabled
+  Not worth caching
+Skipping task ':build-logic:pluginDescriptors' as it is up-to-date.
+Resolve mutations for :build-logic:processResources (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:processResources (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:processResources
+Caching disabled for task ':build-logic:processResources' because:
+  Build cache is disabled
+  Not worth caching
+Task ':build-logic:processResources' is not up-to-date because:
+  Value of input property 'rootSpec$1.filteringCharset' has changed for task ':build-logic:processResources'
+  Value of input property 'rootSpec$2.filteringCharset' has changed for task ':build-logic:processResources'
+file or directory 'D:\FORGE_MODDING\BetterBeaconEffects\build-logic\src\main\resources', not found
+Resolve mutations for :build-logic:classes (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:classes (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:classes
+Skipping task ':build-logic:classes' as it has no actions.
+Resolve mutations for :build-logic:jar (Thread[#107,Execution worker Thread 2,5,main]) started.
+:build-logic:jar (Thread[#107,Execution worker Thread 2,5,main]) started.
+
+> Task :build-logic:jar
+Caching disabled for task ':build-logic:jar' because:
+  Build cache is disabled
+  Not worth caching
+Task ':build-logic:jar' is not up-to-date because:
+  Value of input property 'rootSpec$1.filteringCharset' has changed for task ':build-logic:jar'
+  Value of input property 'rootSpec$2$1.filteringCharset' has changed for task ':build-logic:jar'
+  Value of input property 'rootSpec$2.filteringCharset' has changed for task ':build-logic:jar'
+file or directory 'D:\FORGE_MODDING\BetterBeaconEffects\build-logic\build\classes\groovy\main', not found
+
+> Configure project :common
+Evaluating project ':common' using build file 'D:\FORGE_MODDING\BetterBeaconEffects\common\build.gradle'.
+Resolved plugin [id: 'multiloader-common']
+Resolved plugin [id: 'net.neoforged.moddev']
+Parsed unknown MC version 26.3 from NeoForm version 26.3-1. Using capabilities of latest known Minecraft version 26.3-snapshot-8 with an updated Minecraft version.
+Starting process 'command 'C:\Program Files\Java\jre1.8.0_471\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm14252009040773438926probe Command: C:\Program Files\Java\jre1.8.0_471\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Program Files\Java\jre1.8.0_471\bin\java.exe''
+Received JVM installation metadata from 'C:\Program Files\Java\jre1.8.0_471': {JAVA_HOME=C:\Program Files\Java\jre1.8.0_471, JAVA_VERSION=1.8.0_471, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=1.8.0_471-b09, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=25.471-b09, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Program Files\Eclipse Adoptium\jdk-25.0.1.8-hotspot\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm728730888766926486probe Command: C:\Program Files\Eclipse Adoptium\jdk-25.0.1.8-hotspot\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Program Files\Eclipse Adoptium\jdk-25.0.1.8-hotspot\bin\java.exe''
+Received JVM installation metadata from 'C:\Program Files\Eclipse Adoptium\jdk-25.0.1.8-hotspot': {JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-25.0.1.8-hotspot, JAVA_VERSION=25.0.1, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=25.0.1+8-LTS, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=25.0.1+8-LTS, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
+Starting process 'command 'C:\Program Files\Java\jdk-17\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm8880491868107994148probe Command: C:\Program Files\Java\jdk-17\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Program Files\Java\jdk-17\bin\java.exe''
+Received JVM installation metadata from 'C:\Program Files\Java\jdk-17': {JAVA_HOME=C:\Program Files\Java\jdk-17, JAVA_VERSION=17.0.12, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=17.0.12+8-LTS-286, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=17.0.12+8-LTS-286, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Users\alexd\.jdks\openjdk-23.0.2\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm10049499849147913873probe Command: C:\Users\alexd\.jdks\openjdk-23.0.2\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\alexd\.jdks\openjdk-23.0.2\bin\java.exe''
+Received JVM installation metadata from 'C:\Users\alexd\.jdks\openjdk-23.0.2': {JAVA_HOME=C:\Users\alexd\.jdks\openjdk-23.0.2, JAVA_VERSION=23.0.2, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=23.0.2+7-58, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=23.0.2+7-58, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Users\alexd\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm10854881566338758018probe Command: C:\Users\alexd\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\alexd\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.exe''
+Received JVM installation metadata from 'C:\Users\alexd\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2': {JAVA_HOME=C:\Users\alexd\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2, JAVA_VERSION=21.0.7, JAVA_VENDOR=Eclipse Adoptium, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=21.0.7+6-LTS, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=21.0.7+6-LTS, VM_VENDOR=Eclipse Adoptium, OS_ARCH=amd64}
+Starting process 'command 'C:\Users\alexd\.jdks\openjdk-24.0.1\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm4752502890784839028probe Command: C:\Users\alexd\.jdks\openjdk-24.0.1\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\alexd\.jdks\openjdk-24.0.1\bin\java.exe''
+Received JVM installation metadata from 'C:\Users\alexd\.jdks\openjdk-24.0.1': {JAVA_HOME=C:\Users\alexd\.jdks\openjdk-24.0.1, JAVA_VERSION=24.0.1, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=24.0.1+9-30, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=24.0.1+9-30, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Program Files\Java\jdk-23\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm2608522963255475017probe Command: C:\Program Files\Java\jdk-23\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Program Files\Java\jdk-23\bin\java.exe''
+Received JVM installation metadata from 'C:\Program Files\Java\jdk-23': {JAVA_HOME=C:\Program Files\Java\jdk-23, JAVA_VERSION=23.0.2, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=23.0.2+7-58, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=23.0.2+7-58, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Users\alexd\.jdks\openjdk-25.0.1\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm138676325717038524probe Command: C:\Users\alexd\.jdks\openjdk-25.0.1\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\alexd\.jdks\openjdk-25.0.1\bin\java.exe''
+Received JVM installation metadata from 'C:\Users\alexd\.jdks\openjdk-25.0.1': {JAVA_HOME=C:\Users\alexd\.jdks\openjdk-25.0.1, JAVA_VERSION=25.0.1, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=25.0.1+8-27, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=25.0.1+8-27, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Starting process 'command 'C:\Users\alexd\.jdks\corretto-11.0.26\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm6622011746581306368probe Command: C:\Users\alexd\.jdks\corretto-11.0.26\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Users\alexd\.jdks\corretto-11.0.26\bin\java.exe''
+Received JVM installation metadata from 'C:\Users\alexd\.jdks\corretto-11.0.26': {JAVA_HOME=C:\Users\alexd\.jdks\corretto-11.0.26, JAVA_VERSION=11.0.26, JAVA_VENDOR=Amazon.com Inc., RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=11.0.26+4-LTS, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=11.0.26+4-LTS, VM_VENDOR=Amazon.com Inc., OS_ARCH=amd64}
+Found installer in mod fabricloader version 0.19.5
+
+> Configure project :fabric
+Evaluating project ':fabric' using build file 'D:\FORGE_MODDING\BetterBeaconEffects\fabric\build.gradle'.
+Resolved plugin [id: 'multiloader-loader']
+Resolved plugin [id: 'net.fabricmc.fabric-loom']
+Fabric Loom: 1.18.1
+(kotlin.metadata.jvm.KotlinClassMetadata) with version (2.4.0-release-281) was loaded from (/C:/Users/alexd/.gradle/wrapper/dists/gradle-9.7.1-bin/1w1c7tv4s851m17nbqdsro2tv/gradle-9.7.1/lib/kotlin-build-tools-impl-2.4.0.jar)
+(org.objectweb.asm.ClassVisitor) with version (9.10.1) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/9.10.1/ada2141c0cc52ee8f5c48cd5fa4ce0e794f22236/asm-9.10.1.jar)
+(org.objectweb.asm.tree.analysis.Analyzer) with version (9.10.1) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.10.1/8d49f14d51f632cb1d87c88d1ceaf50db0d8af1b/asm-analysis-9.10.1.jar)
+(org.objectweb.asm.commons.ClassRemapper) with version (9.10.1) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-commons/9.10.1/4229e4c55fd8e01c23f9fe9884075cc628aacc50/asm-commons-9.10.1.jar)
+(org.objectweb.asm.tree.ClassNode) with version (9.10.1) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-tree/9.10.1/e244332a17564c1d1572449399a842de35881be2/asm-tree-9.10.1.jar)
+(org.objectweb.asm.util.ASMifier) with version (9.10.1) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.10.1/7bb9d450e8d4cbf9f9e04096c44bbfe7fba80b15/asm-util-9.10.1.jar)
+(com.google.gson.Gson) with version (null) was loaded from (/C:/Users/alexd/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.14.0/efc0e34ede4e3204eaefb84a00e55e8c86634382/gson-2.14.0.jar)
+Using cached Minecraft jars
+:Extracting server jar from bootstrap
+Starting process 'command 'C:\Program Files\Java\jdk-24\bin\java.exe''. Working directory: C:\Users\alexd\.gradle\.tmp\tmp-jvm616755558672856982probe Command: C:\Program Files\Java\jdk-24\bin\java.exe -Xmx32m -Xms32m -cp . JavaProbe
+Successfully started process 'command 'C:\Program Files\Java\jdk-24\bin\java.exe''
+Received JVM installation metadata from 'C:\Program Files\Java\jdk-24': {JAVA_HOME=C:\Program Files\Java\jdk-24, JAVA_VERSION=24.0.2, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=24.0.2+12-54, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=24.0.2+12-54, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+Mod-provided javadoc from mod fabric-content-registries-v0 should have the markdown metadata entry
+Applying installer data from configuration 'mainCompileDependencyResolve'
+
+> Configure project :neoforge
+Evaluating project ':neoforge' using build file 'D:\FORGE_MODDING\BetterBeaconEffects\neoforge\build.gradle'.
+Resolved plugin [id: 'multiloader-loader']
+Resolved plugin [id: 'net.neoforged.moddev']
+Parsed unknown MC version 26.3 from NeoForge version 26.3.0.1-beta. Using capabilities of latest known Minecraft version 26.3-snapshot-8 with an updated Minecraft version.
+All projects evaluated.
+Task path ':fabric:runClient' matched project ':fabric'
+Task name matched 'runClient'
+
+[Incubating] Problems report is available at: file:///D:/FORGE_MODDING/BetterBeaconEffects/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+7 actionable tasks: 2 executed, 5 up-to-date
+Watched directory hierarchies: [D:\FORGE_MODDING\BetterBeaconEffects]

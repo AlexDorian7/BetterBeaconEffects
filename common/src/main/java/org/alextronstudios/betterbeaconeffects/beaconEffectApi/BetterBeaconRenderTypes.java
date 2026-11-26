@@ -30,8 +30,26 @@ public class BetterBeaconRenderTypes {
             .withDepthStencilState(DepthStencilState.DEFAULT)
             .buildSnippet();
 
+    private static final RenderPipeline.Snippet SPACE_SNIPPET = RenderPipeline.builder(GLOBALS_SNIPPET)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+            .withBindGroupLayout(BindGroupLayouts.FOG)
+            .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+            .withVertexShader("core/rendertype_space")
+            .withFragmentShader("core/rendertype_space")
+            .withBindGroupLayout(BindGroupLayouts.SAMPLER0_SAMPLER1)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR_NORMAL)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withColorTargetState(ColorTargetState.DEFAULT)
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .buildSnippet();
+
     public static final RenderPipeline COLORED_PORTAL_PIPELINE = Services.PLATFORM.register(
             RenderPipeline.builder(END_PORTAL_SNIPPET).withLocation("pipeline/colored_portal").withShaderDefine("PORTAL_LAYERS", 15).build()
+    );
+
+    public static final RenderPipeline SPACE_PIPELINE = Services.PLATFORM.register(
+            RenderPipeline.builder(SPACE_SNIPPET).withLocation("pipeline/space").withShaderDefine("PORTAL_LAYERS", 15).build()
     );
 
     public static RenderSetup COLORED_PORTAL_SETUP = RenderSetup.builder(COLORED_PORTAL_PIPELINE)
@@ -40,7 +58,15 @@ public class BetterBeaconRenderTypes {
             .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
             .createRenderSetup();
 
+    public static RenderSetup SPACE_SETUP = RenderSetup.builder(SPACE_PIPELINE)
+            .withTexture("Sampler0", AbstractEndPortalRenderer.END_SKY_LOCATION)
+            .withTexture("Sampler1", AbstractEndPortalRenderer.END_PORTAL_LOCATION)
+            .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
+            .createRenderSetup();
+
     public static final RenderType COLORED_PORTAL = Services.PLATFORM.create("colored_portal", COLORED_PORTAL_SETUP);
+
+    public static final RenderType SPACE = Services.PLATFORM.create("space", SPACE_SETUP);
 
     public static RenderType beaconBeamTranslucent(Identifier texture) {
         return RenderTypes.beaconBeam(texture, true);

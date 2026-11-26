@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import org.alextronstudios.betterbeaconeffects.CustomBeaconRenderState;
 
 public class BeaconRenderSettings {
@@ -20,9 +19,9 @@ public class BeaconRenderSettings {
     public int beams;
     public RenderType renderType;
     public final BlockEntityRendererProvider.Context context;
-    public CustomBeaconRenderState beaconRenderState;
+    public CustomBeaconRenderState state;
 
-    public BeaconRenderSettings(PoseStack poseStack, SubmitNodeCollector multiBufferSource, int baseHeight, int height, float[] color, Identifier texture, float alpha, int beams, BlockEntityRendererProvider.Context context, CustomBeaconRenderState beaconRenderState) {
+    public BeaconRenderSettings(PoseStack poseStack, SubmitNodeCollector multiBufferSource, int baseHeight, int height, float[] color, Identifier texture, float alpha, int beams, BlockEntityRendererProvider.Context context, CustomBeaconRenderState state) {
         this.poseStack = poseStack;
         this.submitNodeCollector = multiBufferSource;
         this.height = height;
@@ -33,7 +32,7 @@ public class BeaconRenderSettings {
         this.beams = beams;
         this.context = context;
         this.renderType = RenderTypes.beaconBeam(this.texture, true);
-        this.beaconRenderState = beaconRenderState;
+        this.state = state;
     }
 
     /**

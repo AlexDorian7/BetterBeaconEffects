@@ -38,6 +38,8 @@ public class InternalRegister {
         register("fire_effect", FireEffect::new);
         register("water_effect", WaterEffect::new);
         register("earth_effect", EarthEffect::new);
+        register("cube_effect", CubeEffect::new);
+        register("space_effect", SpaceEffect::new);
 
         registered = true;
     }

@@ -1,7 +1,6 @@
 package org.alextronstudios.betterbeaconeffects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.object.crystal.EndCrystalModel;
@@ -13,10 +12,8 @@ import net.minecraft.client.renderer.blockentity.state.BeaconRenderState;
 import net.minecraft.client.renderer.entity.state.EndCrystalRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeaconBeamOwner;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -91,7 +88,7 @@ public class CustomBeaconRender<T extends BlockEntity & BeaconBeamOwner> impleme
 
         poseStack.pushPose();
         float[] colorArr = {0,0,0};
-        BeaconRenderSettings settings = new BeaconRenderSettings(poseStack, submitNodeCollector, beamStart, 0, colorArr, BEAM_LOCATION, 0.125f, 0, context, state);
+        BeaconRenderSettings settings = new BeaconRenderSettings(poseStack, submitNodeCollector, beamStart, MAX_RENDER_Y, colorArr, BEAM_LOCATION, 0.125f, 0, context, state);
         for (Identifier activeEffect : state.activeEffects) {
             BeaconEffect beaconEffect = BeaconEffectRegistry.getRegistry().get(activeEffect);
             beaconEffect.customRenderStep(settings);
@@ -109,19 +106,18 @@ public class CustomBeaconRender<T extends BlockEntity & BeaconBeamOwner> impleme
                     poseStack,
                     submitNodeCollector,
                     state.beamRadiusScale,
-                    state.animationTime,
                     beamStart,
                     i == state.sections.size() - 1 ? 2048 : beamSection.height(),
                     beamSection.color(),
-                    state
+                    state, i
             );
             beamStart += beamSection.height();
         }
     }
 
     private void submitBeaconBeam(
-            PoseStack poseStack, SubmitNodeCollector submitNodeCollector, float beamRadiusScale, float animationTime, int beamStart, int height, int color, CustomBeaconRenderState state
-    ) {
+            PoseStack poseStack, SubmitNodeCollector submitNodeCollector, float beamRadiusScale, int beamStart, int height, int color, CustomBeaconRenderState state,
+            int beamIndex) {
         poseStack.pushPose();
         poseStack.translate(0.5, 0.0, 0.5);
 
@@ -130,100 +126,20 @@ public class CustomBeaconRender<T extends BlockEntity & BeaconBeamOwner> impleme
         for (Identifier activeEffect : state.activeEffects) {
             BeaconEffect beaconEffect = BeaconEffectRegistry.getRegistry().get(activeEffect);
             settings = beaconEffect.alterRenderer(settings);
+            if (beaconEffect.hasCustomBeamRender()) {
+                beaconEffect.customBeamRenderer(settings, beamIndex);
+                poseStack.popPose();
+                return;
+            }
         }
 
-        submitBeaconBeam(settings,
-                settings.poseStack, submitNodeCollector, 1.0F, settings.beaconRenderState.animationTime, settings.baseHeight, settings.height, BEAM_GLOW_RADIUS * beamRadiusScale
+        RenderUtils.submitBeaconBeam(settings,
+                1.0F, settings.state.animationTime, settings.baseHeight, settings.height, BEAM_GLOW_RADIUS * beamRadiusScale, true, true
         );
         poseStack.popPose();
     }
 
-    public void submitBeaconBeam(
-            BeaconRenderSettings settings,
-            PoseStack poseStack,
-            SubmitNodeCollector submitNodeCollector,
-            float scale,
-            float animationTime,
-            int beamStart,
-            int height,
-            float beamGlowRadius
-    ) {
-        int beamEnd = beamStart + height;
 
-        float scroll = height < 0 ? animationTime : -animationTime;
-        float texVOff = Mth.frac(scroll * 0.2F - Mth.floor(scroll * 0.1F));
-
-        for (int i=1; i<=settings.beams; i++) {
-            float wnx = -beamGlowRadius*i;
-            float wnz = -beamGlowRadius*i;
-            float enx = beamGlowRadius*i;
-            float enz = -beamGlowRadius*i;
-            float wsx = -beamGlowRadius*i;
-            float wsz = beamGlowRadius*i;
-            float esx = beamGlowRadius*i;
-            float esz = beamGlowRadius*i;
-            float uu1 = 0.0F;
-            float uu2 = 1.0F;
-            float vv2 = -1.0F + texVOff;
-            float vv1 = height * scale + vv2;
-            int color = ARGB.colorFromFloat(settings.alpha, settings.color[0], settings.color[1], settings.color[2]);
-            submitNodeCollector.submitCustomGeometry(
-                    poseStack,
-                    settings.renderType,
-                    (pose, buffer) -> renderPart(pose, buffer, color, beamStart, beamEnd, wnx, wnz, enx, enz, wsx, wsz, esx, esz, 0.0F, 1.0F, vv1, vv2)
-            );
-        }
-    }
-
-    private static void renderPart(
-            PoseStack.Pose pose,
-            VertexConsumer builder,
-            int color,
-            int beamStart,
-            int beamEnd,
-            float wnx,
-            float wnz,
-            float enx,
-            float enz,
-            float wsx,
-            float wsz,
-            float esx,
-            float esz,
-            float uu1,
-            float uu2,
-            float vv1,
-            float vv2
-    ) {
-        renderQuad(pose, builder, color, beamStart, beamEnd, wnx, wnz, enx, enz, uu1, uu2, vv1, vv2);
-        renderQuad(pose, builder, color, beamStart, beamEnd, esx, esz, wsx, wsz, uu1, uu2, vv1, vv2);
-        renderQuad(pose, builder, color, beamStart, beamEnd, enx, enz, esx, esz, uu1, uu2, vv1, vv2);
-        renderQuad(pose, builder, color, beamStart, beamEnd, wsx, wsz, wnx, wnz, uu1, uu2, vv1, vv2);
-    }
-
-    private static void renderQuad(
-            PoseStack.Pose pose,
-            VertexConsumer builder,
-            int color,
-            int beamStart,
-            int beamEnd,
-            float wnx,
-            float wnz,
-            float enx,
-            float enz,
-            float uu1,
-            float uu2,
-            float vv1,
-            float vv2
-    ) {
-        addVertex(pose, builder, color, beamEnd, wnx, wnz, uu2, vv1);
-        addVertex(pose, builder, color, beamStart, wnx, wnz, uu2, vv2);
-        addVertex(pose, builder, color, beamStart, enx, enz, uu1, vv2);
-        addVertex(pose, builder, color, beamEnd, enx, enz, uu1, vv1);
-    }
-
-    private static void addVertex(PoseStack.Pose pose, VertexConsumer builder, int color, int y, float x, float z, float u, float v) {
-        builder.addVertex(pose, x, y, z).setColor(color).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
-    }
 
     @Override
     public boolean shouldRenderOffScreen() {

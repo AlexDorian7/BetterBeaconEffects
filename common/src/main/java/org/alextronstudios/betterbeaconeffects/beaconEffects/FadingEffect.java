@@ -24,7 +24,7 @@ public class FadingEffect implements BeaconEffect {
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        float f = beaconRenderSettings.beaconRenderState.animationTime;
+        float f = beaconRenderSettings.state.animationTime;
         f=(f/100) % 100;
         beaconRenderSettings.alpha = 0.5F*(Mth.sin((float) (2*Math.PI*f))) + 0.5F;
         return beaconRenderSettings;

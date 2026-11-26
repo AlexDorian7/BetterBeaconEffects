@@ -26,7 +26,7 @@ public class ColorFadeEffect implements BeaconEffect {
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        float f = beaconRenderSettings.beaconRenderState.animationTime;
+        float f = beaconRenderSettings.state.animationTime;
         f=(f/100) % 100;
         float s = 0.5F*(Mth.sin((float) (2*Math.PI*f))) + 0.5F;
         s /= 4;

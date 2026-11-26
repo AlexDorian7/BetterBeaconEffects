@@ -25,7 +25,7 @@ public class RainbowEffect implements BeaconEffect {
 
     @Override
     public BeaconRenderSettings alterRenderer(BeaconRenderSettings beaconRenderSettings) {
-        float f = beaconRenderSettings.beaconRenderState.animationTime;
+        float f = beaconRenderSettings.state.animationTime;
         f=(f/100) % 360;
         Color c = Color.getHSBColor(f, 1, 1);
         beaconRenderSettings.color[0] = c.getRed()/256F;

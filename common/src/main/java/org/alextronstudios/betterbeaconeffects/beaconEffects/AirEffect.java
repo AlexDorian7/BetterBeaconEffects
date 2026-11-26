@@ -1,6 +1,5 @@
 package org.alextronstudios.betterbeaconeffects.beaconEffects;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -54,7 +53,7 @@ public class AirEffect implements BeaconEffect {
     private static void renderWind(BeaconRenderSettings settings, float speed, float radius) {
         settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, RenderTypes.energySwirl(
                 Identifier.fromNamespaceAndPath("betterbeaconeffects", "textures/misc/wind_swirl.png"),
-                (settings.beaconRenderState.animationTime) / speed, 0), (pose, vertexConsumer) -> {
+                (settings.state.animationTime) / speed, 0), (pose, vertexConsumer) -> {
             RenderUtils.renderTubeVortex(pose, vertexConsumer, new Vector3f(-radius, 0, -radius), new Vector3f(16+radius, 16+radius*2, 16+radius), 1, 1, 1, 1);
         });
     }
@@ -66,7 +65,7 @@ public class AirEffect implements BeaconEffect {
         for (int i=0; i<settings.beams; i++) {
             int finalI = i;
             settings.submitNodeCollector.submitCustomGeometry(settings.poseStack, BetterBeaconRenderTypes.beaconBeamCutout(settings.texture), (pose, vertexConsumer) -> {
-                RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH + BASE_RADIUS* finalI, height * WIDTH + BASE_RADIUS* finalI, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], 1, (settings.beaconRenderState.animationTime) / 10f, -(settings.beaconRenderState.animationTime) / 10f);
+                RenderUtils.renderTubePolyTrap(pose, vertexConsumer, 32, (float) settings.baseHeight * WIDTH + BASE_RADIUS* finalI, height * WIDTH + BASE_RADIUS* finalI, settings.baseHeight, settings.height, settings.color[0], settings.color[1], settings.color[2], 1, (settings.state.animationTime) / 10f, -(settings.state.animationTime) / 10f);
             });
         }
     }
